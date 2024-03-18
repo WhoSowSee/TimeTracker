@@ -1,0 +1,73 @@
+[activities]
+"Сон" = [31, 119, 180]
+"Отдых" = [255, 127, 14]
+"Другое" = [140, 86, 75]
+"Пары" = [44, 160, 44]
+"Дорога" = [214, 39, 40]
+"Домашка" = [149, 103, 189]
+# ...
+
+# "Void" = [0, 0, 0]
+
+[global]
+VOID = "Void"
+UTC_OFFSET = "auto"  # "auto" | <int seconds>
+
+# For scripts that generates images and plots
+SILENT = false  # -s --silent
+
+[tracker]
+ANOTHER = "Другое"
+ANOTHER_DEFAULT_NOTE = "Магазин"
+
+[bar]
+HIDE_VOID = false
+
+LABEL_TRESHOLD = 0.04     # -t <float>
+AV_LABEL_TRESHOLD = 0.04  # -avt <float>
+
+SHOW_LEGEND = true  # -l
+LEGEND_COLUMNS = 1  # -lc <int>
+
+PLOT_WIDTH = 9     # -w <float>
+PLOT_HEIGHT = 5.7  # -h <float>
+
+[barh]
+HIDE_VOID = false  # -v
+
+LABEL_TRESHOLD = 0.04      # -t <float>
+AV_LABEL_TRESHOLD = 0.042  # -avt <float>
+
+SHOW_LEGEND = true  # -l
+LEGEND_COLUMNS = 1  # -lc <int>
+
+PLOT_WIDTH = 9     # -w <float>
+PLOT_HEIGHT = 5.7  # -h <float>
+
+[map]
+SHOW_LEGEND = true  # -l
+LEGEND_COLUMNS = 1  # -lc <int>
+
+PLOT_WIDTH = 13.5  # -w <float>
+PLOT_HEIGHT = 5.7  # -h <float>
+
+[density]
+CUMULATIVE = false  # -c
+
+SILENT = false     # -s --silent
+HIDE_VOID = false  # -v
+
+LABEL_TRESHOLD = 0.07  # -t <float>
+
+SHOW_LEGEND = true  # -l
+LEGEND_COLUMNS = 1  # -lc <int>
+
+PLOT_WIDTH = 13.5  # -w <float>
+PLOT_HEIGHT = 5.7  # -h <float>
+
+[circles]
+COLOR_BG = [21, 23, 32]
+
+START_RADIUS = 16    # -r <int>
+IMAGE_SIDE = "auto"  # -h <auto | int>
+IMAGE_SCALE = 4      # -x <int>

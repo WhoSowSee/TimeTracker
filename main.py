@@ -1,21 +1,23 @@
+import importlib
 import os
 import subprocess
 import sys
 import time
 
-from tqdm import tqdm
+from tqdm import trange
 
+import save
 from utils import green, red, white
 
 
 # Если система Windows -> cls, иначе -> clear
-def clear_screen():
+def clear_screen() -> None:
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def date_request() -> int:
     options = (
-        'Добавить занятия',
+        'Действия с активностями',
         'Посмотреть активность за последние две недели',
         'Посмотреть активность за все время',
         'Посмотреть среднее время активности по неделям',
@@ -39,13 +41,16 @@ def date_request() -> int:
 
 
 def file_call(file_path: str) -> None:
-    with tqdm(total=100, desc='Генерация изображения') as f:
-        for i in range(5):
-            time.sleep(0.4)
-            f.update(20)
-    subprocess.run(['python', file_path])
+    importlib.reload(save)
 
-    clear_screen()
+    if save.activities:
+        for i in trange(100, desc='Генерация изображения'):
+            time.sleep(0.03)
+        subprocess.run(['python', file_path])
+        clear_screen()
+    else:
+        input(f'\n{red}Список занятий пуст{white}')
+        clear_screen()
 
 
 def run_activity() -> None:
@@ -68,7 +73,7 @@ def run_activity() -> None:
             clear_screen()
 
 
-def main():
+def main() -> None:
     while True:
         clear_screen()
         run_activity()

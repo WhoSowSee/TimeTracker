@@ -8,7 +8,7 @@ from time import time
 from setup import setup
 from utils import cyan, generate_activites_times, green, h, magenta, red, white
 
-timestamp = time()
+timestamp: float = time()
 activities = []
 
 open('save.py', 'a')  # Touch save file
@@ -16,13 +16,18 @@ from save import *
 
 ARGS, ACTIVITIES = setup('tracker')
 weeks = (timestamp - activities[0][1]) // (7 * 24 * h) if activities else 0
+OS_NAME = os.name
+
+
+def clear_screen() -> None:
+    system('cls' if OS_NAME == 'nt' else 'clear')
 
 
 def data_save(saved=True) -> None:
     with open('save.py', 'w', encoding='UTF-8') as file:
         file.write(f'{saved = }\n{timestamp = }\n')
 
-        if not activities:  # Проверка на пустоту списка
+        if not activities:
             file.write('activities = []\n')
         else:
             file.write('activities = [\n')
@@ -32,7 +37,7 @@ def data_save(saved=True) -> None:
 
     # Weekly dump
     global weeks
-    if saved and activities:  # Проверка на пустоту списка
+    if saved and activities:
         if (timestamp - activities[0][1]) // (7 * 24 * h) > weeks:
             weeks += 1
 
@@ -54,7 +59,8 @@ def data_save(saved=True) -> None:
                     file.write(']\n')
 
 
-def stages_formatter(stages, verb=0):
+# Функция, которая форматирует вывод числа stages в соответствии с правилами русского языка для согласования числительных и существительных.
+def stages_formatter(stages: int, verb=0) -> str:
     if verb:
         form = ['этапа', 'этапов', 'этапов']
     else:
@@ -72,8 +78,8 @@ def stages_formatter(stages, verb=0):
     return f'{magenta}{stages}{white} {form[2]}'
 
 
-def analytics():
-    if not activities:  # Проверка на пустоту списка
+def analytics() -> None:
+    if not activities:
         return
 
     sum_all = timestamp - activities[0][1]
@@ -106,28 +112,28 @@ def analytics():
     input()
 
 
-def clear_activities():
+def clear_activities() -> None:
     global activities
     activities.clear()
     data_save()
     input(f'\n{cyan}Все активности удалены{white}')
-    system('cls' if os.name == 'nt' else 'clear')
+    clear_screen()
 
+    # Error checking
+    if not saved:
+        input(
+            f'Последняя сессия была прервана: {activities[-1][0]} ({activities[-1][2]})'
+        )
+        input(
+            f'Добавление потерянного времени: {cyan}+{timedelta(0, int(time() - timestamp))}{white}\n'
+        )
 
-# Error checking
-if not saved:
-    input(
-        f'Последняя сессия была прервана: {activities[-1][0]} ({activities[-1][2]})'
-    )
-    input(
-        f'Добавление потерянного времени: {cyan}+{timedelta(0, int(time() - timestamp))}{white}\n'
-    )
+        timestamp: float = time()
+        data_save()
 
-    timestamp = time()
-    data_save()
 
 while True:
-    system('cls' if os.name == 'nt' else 'clear')
+    clear_screen()
 
     # Header
     activity = len(activities)
@@ -143,8 +149,8 @@ while True:
         print(stageline)
     # Activities
     print('Выбор занятия:')
-    for i, name in enumerate(ACTIVITIES):
-        print(f'{green}{i + 1}{white}: {name}')
+    for i, name in enumerate(ACTIVITIES, start=1):
+        print(f'{green}{i}{white}: {name}')
 
     print()
 
@@ -205,13 +211,12 @@ while True:
         data_save(saved=False)
         input(f"<< {activity_name}{'' if not note else ' (' + note + ')'} >>")
 
-        timestamp = time()
+        timestamp: float = time()
 
     # End session
     if session_id == len(ACTIVITIES) + 1:
         data_save()
         analytics()
-        # system('cls' if os.name == 'nt' else 'clear')
         sys.exit()
 
     # Delete last activity
@@ -277,7 +282,7 @@ while True:
             activities[-1][-1] = note
 
     if session_id == len(ACTIVITIES) + 5:
-        if not len(activities):
+        if not activities:
             input(stageline)
         else:
             print('Вы уверены, что хотите удалить все занятия?')

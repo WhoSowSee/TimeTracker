@@ -10,11 +10,6 @@ from utils import d, h, w
 
 
 ARGS, ACTIVITIES = setup("circles")
-
-if not save.activities:
-	input("\nСписок занятий пуст")
-	sys.exit()
-
 all_experiment_time = save.timestamp - save.activities[0][1]
 experiment_start_time = save.activities[0][1]
 

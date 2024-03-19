@@ -12,11 +12,6 @@ from utils import w
 
 
 ARGS, ACTIVITIES = setup("density")
-
-if not save.activities:
-	input("\nСписок занятий пуст")
-	sys.exit()
-
 activities_times = generate_activites_times(save.activities, save.timestamp)
 
 

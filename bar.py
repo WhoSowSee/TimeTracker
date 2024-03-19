@@ -5,19 +5,12 @@ from math import ceil
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from matplotlib.ticker import MultipleLocator, PercentFormatter
-from tqdm import tqdm
 
 import save
 from setup import setup
 from utils import d, generate_activites_times, h, m, normalize_color, w
 
-
 ARGS, ACTIVITIES = setup('bar')
-
-if not save.activities:
-	input('\nСписок занятий пуст')
-	sys.exit()
-
 activities_times = generate_activites_times(save.activities, save.timestamp)
 
 save_activities = set([i[0] for i in save.activities])
@@ -178,8 +171,7 @@ ax[0][1].set_yticks(
 )
 ax[0][1].set_ylim(0, d)
 ax[0][1].yaxis.set_major_formatter(
-	lambda y,
-		   _: f'{round(y / h) if round(y / h, 1) == round(y / h) else round(y / h, 1)}ч'
+	lambda y, _: f'{round(y / h) if round(y / h, 1) == round(y / h) else round(y / h, 1)}ч'
 )
 
 # Second plot - average time

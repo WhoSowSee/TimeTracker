@@ -9,20 +9,23 @@ from tqdm import trange
 import save
 from utils import green, red, white
 
+OS_NAME = os.name
+# ERROR_MESSAGE = f'\n{red}Неверный ввод{white}'
+
 
 # Если система Windows -> cls, иначе -> clear
 def clear_screen() -> None:
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system('cls' if OS_NAME == 'nt' else 'clear')
 
 
 def date_request() -> int:
     options = (
-        'Действия с активностями',
-        'Посмотреть активность за последние две недели',
-        'Посмотреть активность за все время',
-        'Посмотреть среднее время активности по неделям',
-        'Посмотреть активность в виде круга',
-        'Завершить сессию',
+        'Активности',
+        'Активность за последние две недели',
+        'Активность за все время',
+        'Среднее время активности по неделям',
+        'Активность в виде круга',
+        'Завершить сессию (Ctrl + C)',
     )
 
     while True:
@@ -38,13 +41,19 @@ def date_request() -> int:
         except ValueError:
             input(f'\n{red}Неверный ввод{white}')
             clear_screen()
+        except Exception as exc:
+            input(f'\n{red}Неверный ввод{exc}{white}')
+            clear_screen()
+        except KeyboardInterrupt:
+            clear_screen()
+            sys.exit()  # Выход из main
 
 
 def file_call(file_path: str) -> None:
     importlib.reload(save)
 
     if save.activities:
-        for i in trange(100, desc='Генерация изображения'):
+        for _ in trange(100, desc='Генерация графика'):
             time.sleep(0.03)
         subprocess.run(['python', file_path])
         clear_screen()
@@ -62,15 +71,17 @@ def run_activity() -> None:
     }
     while True:
         activity_operation: int = date_request()
-
-        if activity_operation in file_paths:
-            file_call(file_paths.get(activity_operation))
-        elif activity_operation == 6:
-            clear_screen()
-            sys.exit()
-        elif activity_operation == 1:
-            subprocess.run(['python', 'tracker.py'])
-            clear_screen()
+        try:
+            if activity_operation in file_paths:
+                file_call(file_paths.get(activity_operation))
+            elif activity_operation == 6:
+                clear_screen()
+                sys.exit()
+            elif activity_operation == 1:
+                subprocess.run(['python', 'tracker.py'])
+                clear_screen()
+        except KeyboardInterrupt:
+            sys.exit()  # Чтобы полностью выйти из tracker
 
 
 def main() -> None:

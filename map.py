@@ -12,11 +12,6 @@ from utils import normalize_color
 
 
 ARGS, ACTIVITIES = setup("map")
-
-if not save.activities:
-	input("\nСписок занятий пуст")
-	sys.exit()
-
 activities_times = generate_activites_times(save.activities, save.timestamp)
 
 # Create plot canvas

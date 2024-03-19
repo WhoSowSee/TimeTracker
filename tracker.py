@@ -11,7 +11,8 @@ from utils import cyan, generate_activites_times, green, h, magenta, red, white
 timestamp: float = time()
 activities = []
 
-open('save.py', 'a')  # Touch save file
+with open('save.py', 'a') as _:  # Touch save file
+    ...
 from save import *
 
 ARGS, ACTIVITIES = setup('tracker')
@@ -59,7 +60,8 @@ def data_save(saved=True) -> None:
                     file.write(']\n')
 
 
-# Функция, которая форматирует вывод числа stages в соответствии с правилами русского языка для согласования числительных и существительных.
+# Функция, которая форматирует вывод числа stages в соответствии с правилами русского языка для
+# согласования числительных и существительных.
 def stages_formatter(stages: int, verb=0) -> str:
     if verb:
         form = ['этапа', 'этапов', 'этапов']
@@ -109,7 +111,7 @@ def analytics() -> None:
             f'Всего: {cyan}{timedelta(0, round(activity_time))}{white}\n'
             f'В среднем {cyan}{timedelta(0, round(activity_mean))}{white} за этап\n'
         )
-    input()
+        input()
 
 
 def clear_activities() -> None:
@@ -168,10 +170,13 @@ while True:
     # Gain input
     try:
         session_id = input('\nВвод: ')
-    except BaseException as exc:
+    except Exception as exc:
         print()
-        input(f'\n{red}Неверный ввод{white}')
+        input(f'\n{red}Неверный ввод{exc}{white}')
         continue
+    except KeyboardInterrupt:
+        clear_screen()
+        exit()  # Первый этап выхода из tracker
 
     if session_id.isdigit():
         session_id = int(session_id)
@@ -263,7 +268,7 @@ while True:
                     )
 
             except Exception as val:
-                input(f'\n{red}Действие отменено{white}')
+                input(f'\n{red}Действие отменено{val}{white}')
 
     # Add a note
     if session_id == len(ACTIVITIES) + 4:

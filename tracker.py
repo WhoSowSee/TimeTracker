@@ -1,6 +1,5 @@
 import os
 import sys
-from ast import literal_eval
 from datetime import datetime, timedelta
 from os import makedirs, path, system
 from time import time
@@ -11,17 +10,17 @@ from utils import cyan, generate_activites_times, green, h, magenta, red, white
 timestamp: float = time()
 activities = []
 
-with open('save.py', 'a') as _:  # Touch save file
+with open('save.py', 'a'):  # Touch save file
     ...
 from save import *
 
 ARGS, ACTIVITIES = setup('tracker')
 weeks = (timestamp - activities[0][1]) // (7 * 24 * h) if activities else 0
-OS_NAME = os.name
+CONSOLE_COMMAND_CLEAR = 'cls' if os.name == 'nt' else 'clear'
 
 
 def clear_screen() -> None:
-    system('cls' if OS_NAME == 'nt' else 'clear')
+    system(CONSOLE_COMMAND_CLEAR)
 
 
 def data_save(saved=True) -> None:
@@ -172,7 +171,7 @@ while True:
         session_id = input('\nВвод: ')
     except Exception as exc:
         print()
-        input(f'\n{red}Неверный ввод{exc}{white}')
+        input(f'\n{red}Неверный ввод\n{exc}{white}')
         continue
     except KeyboardInterrupt:
         clear_screen()
@@ -249,9 +248,7 @@ while True:
             )
 
             try:
-                allocated_time = literal_eval(
-                    input('Этап закончился раньше на: ')
-                )
+                allocated_time = eval(input('Этап закончился раньше на: '))
                 if allocated_time < activity_lasts.total_seconds():
                     timestamp -= allocated_time
 
@@ -268,11 +265,11 @@ while True:
                     )
 
             except Exception as val:
-                input(f'\n{red}Действие отменено{val}{white}')
+                input(f'\n{red}Действие отменено\n{val}{white}')
 
     # Add a note
     if session_id == len(ACTIVITIES) + 4:
-        if not len(activities):
+        if not activities:
             input(stageline)
         else:
             activity_name = activities[-1][0]

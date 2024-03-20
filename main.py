@@ -6,16 +6,34 @@ import time
 
 from tqdm import trange
 
-import save
-from utils import green, red, white
+from utils import green, red, template_save_py, white
 
-OS_NAME = os.name
+with open('save.py', 'a'):
+    ...
+import save
+
+# def template_save_py(saved=True) -> None:
+#     timestamp: float = time()
+#     activities = []
+#     with open('save.py', 'w', encoding='UTF-8') as file:
+#         file.write(f'{saved = }\n{timestamp = }\n')
+
+#         if not activities:
+#             file.write('activities = []\n')
+#         else:
+#             file.write('activities = [\n')
+#             for i in activities:
+#                 file.write(f'\t{i},\n')
+#             file.write(']\n')
+
+
 # ERROR_MESSAGE = f'\n{red}Неверный ввод{white}'
+CONSOLE_COMMAND_CLEAR = 'cls' if os.name == 'nt' else 'clear'
 
 
 # Если система Windows -> cls, иначе -> clear
 def clear_screen() -> None:
-    os.system('cls' if OS_NAME == 'nt' else 'clear')
+    os.system(CONSOLE_COMMAND_CLEAR)
 
 
 def date_request() -> int:
@@ -42,7 +60,7 @@ def date_request() -> int:
             input(f'\n{red}Неверный ввод{white}')
             clear_screen()
         except Exception as exc:
-            input(f'\n{red}Неверный ввод{exc}{white}')
+            input(f'\n{red}Неверный ввод\n{exc}{white}')
             clear_screen()
         except KeyboardInterrupt:
             clear_screen()

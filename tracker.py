@@ -191,7 +191,7 @@ while True:
         activity_name = list(ACTIVITIES.keys())[session_id - 1]
 
         # If activity repeat
-        if len(activities) and activity_name == activities[-1][0]:
+        if activities and activity_name == activities[-1][0]:
             print(
                 f'Продолжение предыдущей сессии -> {activities[-1][0]} ({activities[-1][2]})'
             )

@@ -104,20 +104,3 @@ def create_graphics_directory_path(graph_name: str) -> str:
     )
 
     return directory_path
-
-
-# Template for save.py
-# Функция, чтобы если в главном меню человек сразу выберет создать график, то создастся save.py и выведется сообщение Список пуст
-def template_save_py(saved=True) -> None:
-    timestamp: float = time()
-    activities = []
-    with open('save.py', 'w', encoding='UTF-8') as file:
-        file.write(f'{saved = }\n{timestamp = }\n')
-
-        if not activities:
-            file.write('activities = []\n')
-        else:
-            file.write('activities = [\n')
-            for i in activities:
-                file.write(f'\t{i},\n')
-            file.write(']\n')

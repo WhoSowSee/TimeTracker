@@ -6,26 +6,14 @@ import time
 
 from tqdm import trange
 
-from utils import green, red, template_save_py, white
+from utils import green, red, white
 
-with open('save.py', 'a'):
-    ...
+if not os.path.exists('save.py'):
+    with open('save.py', 'w', encoding='UTF-8') as file:
+        file.write(
+            f'saved = True\ntimestamp = {time.time()}\nactivities = []\n'
+        )
 import save
-
-# def template_save_py(saved=True) -> None:
-#     timestamp: float = time()
-#     activities = []
-#     with open('save.py', 'w', encoding='UTF-8') as file:
-#         file.write(f'{saved = }\n{timestamp = }\n')
-
-#         if not activities:
-#             file.write('activities = []\n')
-#         else:
-#             file.write('activities = [\n')
-#             for i in activities:
-#                 file.write(f'\t{i},\n')
-#             file.write(']\n')
-
 
 # ERROR_MESSAGE = f'\n{red}Неверный ввод{white}'
 CONSOLE_COMMAND_CLEAR = 'cls' if os.name == 'nt' else 'clear'
@@ -99,6 +87,7 @@ def run_activity() -> None:
                 subprocess.run(['python', 'tracker.py'])
                 clear_screen()
         except KeyboardInterrupt:
+            clear_screen()
             sys.exit()  # Чтобы полностью выйти из tracker
 
 

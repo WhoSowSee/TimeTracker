@@ -4,6 +4,8 @@ import subprocess
 import sys
 import time
 
+from rich.console import Console
+from rich.table import Table
 from tqdm import trange
 
 from utils import green, red, white
@@ -27,6 +29,7 @@ def clear_screen() -> None:
 def date_request() -> int:
     options = (
         'Активности',
+        'Активности в виде таблицы',
         'Активность за последние две недели',
         'Активность за все время',
         'Среднее время активности по неделям',
@@ -40,7 +43,7 @@ def date_request() -> int:
 
         try:
             activity_operation = int(input('\nВвод: '))
-            if activity_operation in (1, 2, 3, 4, 5, 6):
+            if activity_operation in (1, 2, 3, 4, 5, 6, 7):
                 return activity_operation
             else:
                 raise ValueError
@@ -55,7 +58,22 @@ def date_request() -> int:
             sys.exit()  # Выход из main
 
 
+def call_activity_table() -> None:
+    importlib.reload(save)
+
+    table = Table(show_lines=True)
+    table.add_column('Активность', justify='center', vertical='middle')
+    table.add_column('Время', justify='center', vertical='middle')
+    table.add_column('Подпись', justify='center', width=30, overflow='fold')
+
+    for activity, _, date, caption in save.activities:
+        table.add_row(activity, date, caption)
+
+    Console().input(table)
+
+
 def file_call(file_path: str) -> None:
+    # Для динамического обновления списка активностей во время выполнения программы
     importlib.reload(save)
 
     if save.activities:
@@ -70,21 +88,24 @@ def file_call(file_path: str) -> None:
 
 def run_activity() -> None:
     file_paths = {
-        2: 'bar.py',
-        3: 'map.py',
-        4: 'density.py',
-        5: 'circles.py',
+        3: 'bar.py',
+        4: 'map.py',
+        5: 'density.py',
+        6: 'circles.py',
     }
     while True:
-        activity_operation: int = date_request()
         try:
+            activity_operation: int = date_request()
             if activity_operation in file_paths:
                 file_call(file_paths.get(activity_operation))
-            elif activity_operation == 6:
+            elif activity_operation == 7:
                 clear_screen()
                 sys.exit()
             elif activity_operation == 1:
                 subprocess.run(['python', 'tracker.py'])
+                clear_screen()
+            elif activity_operation == 2:
+                call_activity_table()
                 clear_screen()
         except KeyboardInterrupt:
             clear_screen()

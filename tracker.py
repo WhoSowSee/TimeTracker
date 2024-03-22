@@ -5,7 +5,8 @@ from os import makedirs, path, system
 from time import time
 
 from setup import setup
-from utils import cyan, generate_activites_times, green, h, magenta, red, white
+from utils import (cyan, generate_activites_times, green, h, m, magenta, red,
+                   s, white)
 
 timestamp: float = time()
 activities = []
@@ -110,7 +111,7 @@ def analytics() -> None:
             f'Всего: {cyan}{timedelta(0, round(activity_time))}{white}\n'
             f'В среднем {cyan}{timedelta(0, round(activity_mean))}{white} за этап\n'
         )
-        input()
+    input()
 
 
 def clear_activities() -> None:
@@ -169,13 +170,12 @@ while True:
     # Gain input
     try:
         session_id = input('\nВвод: ')
+    except KeyboardInterrupt:
+        exit()  # Первый этап выхода из tracker
     except Exception as exc:
         print()
-        input(f'\n{red}Неверный ввод\n{exc}{white}')
+        input(f'\n{red}Неверный ввод{white}')
         continue
-    except KeyboardInterrupt:
-        clear_screen()
-        exit()  # Первый этап выхода из tracker
 
     if session_id.isdigit():
         session_id = int(session_id)
@@ -221,11 +221,11 @@ while True:
     if session_id == len(ACTIVITIES) + 1:
         data_save()
         analytics()
-        sys.exit()
+        exit()
 
     # Delete last activity
     if session_id == len(ACTIVITIES) + 2:
-        if not len(activities):
+        if not activities:
             input(stageline)
         else:
             print(f'Удалить: {activities[-1][0]} ({activities[-1][2]})?')
@@ -236,17 +236,19 @@ while True:
 
     # Change last activity time
     if session_id == len(ACTIVITIES) + 3:
-        if not len(activities):
+        if not activities:
             input(stageline)
         else:
             activity_name = activities[-1][0]
             activity_start_time = activities[-1][2]
-
             activity_lasts = timedelta(0, round(timestamp - activities[-1][1]))
+
+            print(
+                f'Формат ввода времени: {green}15*h + 4*m + 12*s{white} ({cyan}h{white} - часы, {cyan}m{white} - минуты, {cyan}s{white} - секунды)\n'
+            )
             print(
                 f'Последний этап: {activity_name} ({activity_start_time}) {cyan}{activity_lasts}{white}'
             )
-
             try:
                 allocated_time = eval(input('Этап закончился раньше на: '))
                 if allocated_time < activity_lasts.total_seconds():
@@ -263,9 +265,8 @@ while True:
                     input(
                         f'\n{red}Этап становится отрицательным, действие отменено{white}'
                     )
-
-            except Exception as val:
-                input(f'\n{red}Действие отменено\n{val}{white}')
+            except BaseException as val:
+                input(f'\n\n{red}Действие отменено{white}')
 
     # Add a note
     if session_id == len(ACTIVITIES) + 4:

@@ -4,7 +4,9 @@ import subprocess
 import sys
 import time
 
+import rich
 from rich.console import Console
+from rich.markdown import Markdown
 from rich.table import Table
 from tqdm import trange
 
@@ -19,6 +21,22 @@ import save
 
 # ERROR_MESSAGE = f'\n{red}Неверный ввод{white}'
 CONSOLE_COMMAND_CLEAR = 'cls' if os.name == 'nt' else 'clear'
+OPTIONS = (
+    'Активности',
+    'Активности в виде таблицы',
+    'Активность за последние две недели',
+    'Активность за все время',
+    'Среднее время активности по неделям',
+    'Активность в виде круга',
+    'Инструкция',
+    'Завершить сессию (Ctrl + C)',
+)
+FILE_PATHS = {
+    3: 'bar.py',
+    4: 'map.py',
+    5: 'density.py',
+    6: 'circles.py',
+}
 
 
 # Если система Windows -> cls, иначе -> clear
@@ -27,31 +45,17 @@ def clear_screen() -> None:
 
 
 def date_request() -> int:
-    options = (
-        'Активности',
-        'Активности в виде таблицы',
-        'Активность за последние две недели',
-        'Активность за все время',
-        'Среднее время активности по неделям',
-        'Активность в виде круга',
-        'Завершить сессию (Ctrl + C)',
-    )
-
     while True:
-        for ind, name in enumerate(options, start=1):
+        for ind, name in enumerate(OPTIONS, start=1):
             print(f'{green}{ind}{white}: {name}')
-
         try:
             activity_operation = int(input('\nВвод: '))
-            if activity_operation in (1, 2, 3, 4, 5, 6, 7):
+            if activity_operation in (1, 2, 3, 4, 5, 6, 7, 8):
                 return activity_operation
             else:
                 raise ValueError
-        except ValueError:
-            input(f'\n{red}Неверный ввод{white}')
-            clear_screen()
         except Exception as exc:
-            input(f'\n{red}Неверный ввод\n{exc}{white}')
+            # input(f'\n{red}Неверный ввод{white}')
             clear_screen()
         except KeyboardInterrupt:
             clear_screen()
@@ -60,26 +64,32 @@ def date_request() -> int:
 
 def call_activity_table() -> None:
     importlib.reload(save)
+    if save.activities:
+        table = Table(show_lines=True)
+        table.add_column('Активность', justify='center', vertical='middle')
+        table.add_column('Время', justify='center', vertical='middle')
+        table.add_column(
+            'Подпись', justify='center', width=30, overflow='fold'
+        )
 
-    table = Table(show_lines=True)
-    table.add_column('Активность', justify='center', vertical='middle')
-    table.add_column('Время', justify='center', vertical='middle')
-    table.add_column('Подпись', justify='center', width=30, overflow='fold')
+        for activity, _, date, caption in save.activities:
+            table.add_row(activity, date, caption)
 
-    for activity, _, date, caption in save.activities:
-        table.add_row(activity, date, caption)
+        print()
+        Console().input(table)
+    else:
+        input(f'\n{red}Список занятий пуст{white}')
+        clear_screen()
 
-    Console().input(table)
 
-
-def file_call(file_path: str) -> None:
+def call_file(file_path: str) -> None:
     # Для динамического обновления списка активностей во время выполнения программы
     importlib.reload(save)
 
     if save.activities:
         for _ in trange(100, desc='Генерация графика'):
             time.sleep(0.03)
-        subprocess.run(['python', file_path])
+        subprocess.run([sys.executable, file_path])
         clear_screen()
     else:
         input(f'\n{red}Список занятий пуст{white}')
@@ -87,18 +97,13 @@ def file_call(file_path: str) -> None:
 
 
 def run_activity() -> None:
-    file_paths = {
-        3: 'bar.py',
-        4: 'map.py',
-        5: 'density.py',
-        6: 'circles.py',
-    }
     while True:
         try:
             activity_operation: int = date_request()
-            if activity_operation in file_paths:
-                file_call(file_paths.get(activity_operation))
-            elif activity_operation == 7:
+
+            if activity_operation in FILE_PATHS:
+                call_file(FILE_PATHS.get(activity_operation))
+            elif activity_operation == 8:
                 clear_screen()
                 sys.exit()
             elif activity_operation == 1:
@@ -106,6 +111,12 @@ def run_activity() -> None:
                 clear_screen()
             elif activity_operation == 2:
                 call_activity_table()
+                clear_screen()
+            elif activity_operation == 7:
+                with open('instruction.md', 'r') as f:
+                    markdown_text = f.read()
+                rich.print(Markdown(markdown_text))
+                input()
                 clear_screen()
         except KeyboardInterrupt:
             clear_screen()

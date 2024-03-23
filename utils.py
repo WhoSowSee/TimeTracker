@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-from time import time
 
 # Time
 s = 1
@@ -96,6 +95,7 @@ def timedelta(time):
 def create_graphics_directory_path(graph_name: str) -> str:
     current_time = datetime.now().strftime("%d.%m.%Y.%H_%M")
     directory_images = 'graph_images'
+
     if not os.path.exists(directory_images):
         os.makedirs(directory_images)
 

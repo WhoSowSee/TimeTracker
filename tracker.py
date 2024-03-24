@@ -1,18 +1,25 @@
 import os
-import sys
 from datetime import datetime, timedelta
 from os import makedirs, path, system
 from time import time
 
 from setup import setup
-from utils import (cyan, generate_activites_times, green, h, m, magenta, red,
-                   s, white)
+from utils import (
+    cyan,
+    generate_activites_times,
+    green,
+    h,
+    m,
+    magenta,
+    red,
+    s,
+    white,
+)
 
+saved = True
 timestamp: float = time()
 activities = []
 
-with open('save.py', 'a'):  # Touch save file
-    ...
 from save import *
 
 ARGS, ACTIVITIES = setup('tracker')
@@ -26,8 +33,6 @@ def clear_screen() -> None:
 
 def data_save(saved=True) -> None:
     with open('save.py', 'w', encoding='UTF-8') as file:
-        file.write(f'{saved = }\n{timestamp = }\n')
-
         if not activities:
             file.write('activities = []\n')
         else:
@@ -162,7 +167,7 @@ while True:
             'Удалить последнее занятие',
             'Изменить время последнего занятия',
             'Добавить подпись к последнему занятию',
-            'Очистить все занятия',
+            'Удалить все занятия',
         )
     ):
         print(f"{green}{'edcif'[ind]}{white}: {name}")

@@ -14,20 +14,17 @@ from utils import green, red, white
 
 if not os.path.exists('save.py'):
     with open('save.py', 'w', encoding='UTF-8') as file:
-        file.write(
-            f'saved = True\ntimestamp = {time.time()}\nactivities = []\n'
-        )
+        file.write('activities = []\n')
 import save
 
-# ERROR_MESSAGE = f'\n{red}Неверный ввод{white}'
 CONSOLE_COMMAND_CLEAR = 'cls' if os.name == 'nt' else 'clear'
 OPTIONS = (
     'Активности',
-    'Активности в виде таблицы',
-    'Активность за последние две недели',
-    'Активность за все время',
-    'Среднее время активности по неделям',
-    'Активность в виде круга',
+    'Таблица активности',
+    'График активности за две недели',
+    'График активности за все время',
+    'График среднего времени активности по неделям',
+    'График активности в виде круга',
     'Инструкция',
     'Завершить сессию (Ctrl + C)',
 )
@@ -55,7 +52,6 @@ def date_request() -> int:
             else:
                 raise ValueError
         except Exception as exc:
-            # input(f'\n{red}Неверный ввод{white}')
             clear_screen()
         except KeyboardInterrupt:
             clear_screen()
@@ -100,19 +96,20 @@ def run_activity() -> None:
     while True:
         try:
             activity_operation: int = date_request()
-
             if activity_operation in FILE_PATHS:
-                call_file(FILE_PATHS.get(activity_operation))
+                call_file(FILE_PATHS[activity_operation])
             elif activity_operation == 8:
                 clear_screen()
-                sys.exit()
+                sys.exit()  # Выход из main
             elif activity_operation == 1:
-                subprocess.run(['python', 'tracker.py'])
+                importlib.reload(save)
+                subprocess.run([sys.executable, 'tracker.py'])
                 clear_screen()
             elif activity_operation == 2:
                 call_activity_table()
                 clear_screen()
             elif activity_operation == 7:
+                clear_screen()
                 with open('instruction.md', 'r') as f:
                     markdown_text = f.read()
                 rich.print(Markdown(markdown_text))
@@ -120,7 +117,8 @@ def run_activity() -> None:
                 clear_screen()
         except KeyboardInterrupt:
             clear_screen()
-            sys.exit()  # Чтобы полностью выйти из tracker
+            # TODO: Сделать возможность выхода из tracker в main по Ctrl + C
+            sys.exit()  # Полный выход из tracker
 
 
 def main() -> None:

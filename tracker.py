@@ -33,6 +33,7 @@ def clear_screen() -> None:
 
 def data_save(saved=True) -> None:
     with open('save.py', 'w', encoding='UTF-8') as file:
+        file.write(f'{saved = }\n{timestamp = }\n')
         if not activities:
             file.write('activities = []\n')
         else:
@@ -40,6 +41,12 @@ def data_save(saved=True) -> None:
             for i in activities:
                 file.write(f'\t{i},\n')
             file.write(']\n')
+
+        # Alternative
+        # file.write('activities = [\n')
+        # for i in activities:
+        #     file.write(f'\t{i},\n')
+        # file.write(']\n')
 
     # Weekly dump
     global weeks

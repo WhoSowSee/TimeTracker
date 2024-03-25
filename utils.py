@@ -18,10 +18,6 @@ magenta = "\033[35m"
 cyan = "\033[36m"
 
 
-def color(text, color):
-    return f"{color}{text}{white}"
-
-
 def normalize_color(activity):
     color = tuple([rgb / 255 for rgb in activity])
 
@@ -44,22 +40,23 @@ def generate_activites_times(activities, timestamp):
     return activities_times
 
 
-def stages_formatter(stages, verb=0):
-    if verb:
-        form = ["этапа", "этапов", "этапов"]
-    else:
-        form = ["этап", "этапа", "этапов"]
+# Уже есть в tracker, но можно импортировать в tracker отсюда
+# def stages_formatter(stages, verb=0) -> str:
+#     if verb:
+#         form = ["этапа", "этапов", "этапов"]
+#     else:
+#         form = ["этап", "этапа", "этапов"]
 
-    last_digit = int(str(stages)[-1])
-    last_2_digits = int(str(stages)[-2:])
+#     last_digit = int(str(stages)[-1])
+#     last_2_digits = int(str(stages)[-2:])
 
-    if last_digit == 1 and last_2_digits != 11:
-        return f"{stages} {form[0]}"
+#     if last_digit == 1 and last_2_digits != 11:
+#         return f"{stages} {form[0]}"
 
-    if 1 <= last_digit <= 4 and (last_2_digits < 10 or last_2_digits > 20):
-        return f"{stages} {form[1]}"
+#     if 1 <= last_digit <= 4 and (last_2_digits < 10 or last_2_digits > 20):
+#         return f"{stages} {form[1]}"
 
-    return f"{stages} {form[2]}"
+#     return f"{stages} {form[2]}"
 
 
 # def delta(time, cap=d):
@@ -69,7 +66,7 @@ def stages_formatter(stages, verb=0):
 #             return f"{round(time) if round(time, 1) == round(time) else round(time, 1)}{name}"
 
 
-def timedelta(time):
+def timedelta(time) -> str:
     time = int(time)
 
     if time < d:

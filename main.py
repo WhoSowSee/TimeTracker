@@ -59,33 +59,22 @@ def date_request() -> int:
 
 
 def call_activity_table() -> None:
-    importlib.reload(save)
-    if save.activities:
-        table = Table(show_lines=True)
-        table.add_column('Активность', justify='center', vertical='middle')
-        table.add_column('Время', justify='center', vertical='middle')
-        table.add_column(
-            'Подпись', justify='center', width=30, overflow='fold'
-        )
+    table = Table(show_lines=True)
+    table.add_column('Активность', justify='center', vertical='middle')
+    table.add_column('Время', justify='center', vertical='middle')
+    table.add_column('Подпись', justify='center', width=30, overflow='fold')
 
-        for activity, _, date, caption in save.activities:
-            table.add_row(activity, date, caption)
+    for activity, _, date, caption in save.activities:
+        table.add_row(activity, date, caption)
 
-        print()
-        Console().input(table)
-    else:
-        input(f'\n{red}Список занятий пуст{white}')
-        clear_screen()
+    Console().input(table)
 
 
 def call_file(file_path: str) -> None:
-    # Для динамического обновления списка активностей во время выполнения программы
-    importlib.reload(save)
-
     if save.activities:
         for _ in trange(100, desc='Генерация графика'):
             time.sleep(0.03)
-        subprocess.run([sys.executable, file_path])
+        subprocess.run([sys.executable, os.path.abspath(file_path)])
         clear_screen()
     else:
         input(f'\n{red}Список занятий пуст{white}')
@@ -97,17 +86,23 @@ def run_activity() -> None:
         try:
             activity_operation: int = date_request()
             if activity_operation in FILE_PATHS:
+                importlib.reload(save)
                 call_file(FILE_PATHS[activity_operation])
             elif activity_operation == 8:
                 clear_screen()
                 sys.exit()  # Выход из main
             elif activity_operation == 1:
-                importlib.reload(save)
-                subprocess.run([sys.executable, 'tracker.py'])
+                subprocess.run([sys.executable, os.path.abspath('tracker.py')])
                 clear_screen()
             elif activity_operation == 2:
-                call_activity_table()
-                clear_screen()
+                importlib.reload(save)
+                if save.activities:
+                    clear_screen()
+                    call_activity_table()
+                    clear_screen()
+                else:
+                    input(f'\n{red}Список занятий пуст{white}')
+                    clear_screen()
             elif activity_operation == 7:
                 clear_screen()
                 with open('instruction.md', 'r') as f:

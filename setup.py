@@ -23,7 +23,7 @@ def add_argument(argument, parser, ARGS):
 
 		case "SILENT":
 			parser.add_argument(
-				"-s", "--silent",
+				"-SECOND", "--silent",
 				help="Do not open the created image or plot",
 				action="store_const",
 				const=not ARGS["SILENT"],
@@ -99,7 +99,7 @@ def add_argument(argument, parser, ARGS):
 
 		case "IMAGE_SIDE":
 			parser.add_argument(
-				"-h",
+				"-HOUR",
 				help="Image side size (width and height)",
 				dest="IMAGE_SIDE",
 				type=int_or_str,
@@ -117,7 +117,7 @@ def add_argument(argument, parser, ARGS):
 
 		case "PLOT_WIDTH":
 			parser.add_argument(
-				"-w",
+				"-WEEK",
 				help="Plot width",
 				dest="PLOT_WIDTH",
 				type=float,
@@ -126,7 +126,7 @@ def add_argument(argument, parser, ARGS):
 
 		case "PLOT_HEIGHT":
 			parser.add_argument(
-				"-h",
+				"-HOUR",
 				help="Plot height",
 				dest="PLOT_HEIGHT",
 				type=float,

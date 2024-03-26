@@ -7,16 +7,16 @@ import save
 from setup import setup
 from utils import (
     create_graphics_directory_path,
-    d,
-    generate_activites_times,
-    h,
-    m,
+    DAY,
+    generate_activities_times,
+    HOUR,
+    MINUTE,
     normalize_color,
-    w,
+    WEEK,
 )
 
 ARGS, ACTIVITIES = setup("map")
-activities_times = generate_activites_times(save.activities, save.timestamp)
+activities_times = generate_activities_times(save.activities, save.timestamp)
 GRAPH_NAME = 'map'
 
 # Create plot canvas
@@ -56,27 +56,27 @@ def bar_constructor(x, y):
 
 # Generate all parts and add it to plot
 experiment_start_time = save.activities[0][1]
-offset = experiment_start_time % d + ARGS["UTC_OFFSET"]
+offset = experiment_start_time % DAY + ARGS["UTC_OFFSET"]
 days = 1
 
 for activity in save.activities:
     # Create one bar
-    if activities_times[activity[0]][0] <= d - offset:
+    if activities_times[activity[0]][0] <= DAY - offset:
         bar_constructor(days, activities_times[activity[0]][0])
 
     else:
         to_distribute = activities_times[activity[0]][0]
-        to_distribute -= d - offset
-        bar_constructor(days, d - offset)
+        to_distribute -= DAY - offset
+        bar_constructor(days, DAY - offset)
 
         # Create bars, separated by days
         while to_distribute != 0:
             days += 1
             offset = 0
 
-            if to_distribute >= d:
-                bar_constructor(days, d)
-                to_distribute -= d
+            if to_distribute >= DAY:
+                bar_constructor(days, DAY)
+                to_distribute -= DAY
             else:
                 bar_constructor(days, to_distribute)
                 to_distribute = 0
@@ -100,16 +100,16 @@ if ARGS["SHOW_LEGEND"]:
     )
 
 start_day = datetime.fromtimestamp(save.activities[0][1]).weekday()
-start_hour = experiment_start_time % (d) + ARGS["UTC_OFFSET"]
+start_hour = experiment_start_time % (DAY) + ARGS["UTC_OFFSET"]
 
 days_of_week = ("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
 
 
 def format_coord(x, y):
     x = int(x - 0.5)
-    y = round(y / h) if round(y / h, 1) == round(y / h) else round(y / h, 1)
+    y = round(y / HOUR) if round(y / HOUR, 1) == round(y / HOUR) else round(y / HOUR, 1)
 
-    selected_time = x * d + y * h + experiment_start_time - start_hour
+    selected_time = x * DAY + y * HOUR + experiment_start_time - start_hour
 
     # Form bar info
     bar_info = ""
@@ -128,15 +128,15 @@ def format_coord(x, y):
         bar_info = f"{i[0]}"
         bar_info += f" ({i[-1]})" if i[-1] else ""
         bar_info += (
-            f" ({round((pivot - i[1]) / h, 1)}ч)\n"
-            if (pivot - i[1]) / h >= 1
-            else f" ({round((pivot - i[1]) / m, 1)}м)\n"
+            f" ({round((pivot - i[1]) / HOUR, 1)}ч)\n"
+            if (pivot - i[1]) / HOUR >= 1
+            else f" ({round((pivot - i[1]) / MINUTE, 1)}м)\n"
         )
 
     # Form position info
     position_info = (
         f"x={days_of_week[(x + start_day) % 7]}, {y=}ч "
-        f"({round((selected_time - experiment_start_time) // w + 1)} неделя)"
+        f"({round((selected_time - experiment_start_time) // WEEK + 1)} неделя)"
     )
 
     return bar_info + position_info
@@ -151,11 +151,11 @@ ax[0][1].set_xlim(0.5, days + 0.5)
 ax[0][1].xaxis.set_major_formatter(lambda x, _: int(x - 0.5) // 7 + 1)
 
 ax[0][1].set_yticks(
-    range(0, d + 1, d // 10), [f"{i}%" for i in range(0, 101, 10)]
+    range(0, DAY + 1, DAY // 10), [f"{i}%" for i in range(0, 101, 10)]
 )
-ax[0][1].set_ylim(0, d)
+ax[0][1].set_ylim(0, DAY)
 ax[0][1].yaxis.set_major_formatter(
-    lambda y, _: f"{round(y / h) if round(y / h, 1) == round(y / h) else round(y / h, 1)}ч"
+    lambda y, _: f"{round(y / HOUR) if round(y / HOUR, 1) == round(y / HOUR) else round(y / HOUR, 1)}ч"
 )
 
 plt.tight_layout()

@@ -10,7 +10,7 @@ from rich.markdown import Markdown
 from rich.table import Table
 from tqdm import trange
 
-from utils import green, red, white
+from utils import GREEN, RED, WHITE
 
 if not os.path.exists('save.py'):
     with open('save.py', 'w', encoding='UTF-8') as file:
@@ -18,16 +18,16 @@ if not os.path.exists('save.py'):
 import save
 
 CONSOLE_COMMAND_CLEAR = 'cls' if os.name == 'nt' else 'clear'
-OPTIONS = (
-    'Активности',
-    'Таблица активности',
-    'График активности за две недели',
-    'График активности за все время',
-    'График среднего времени активности по неделям',
-    'График активности в виде круга',
-    'Инструкция',
-    'Завершить сессию (Ctrl + C)',
-)
+OPTIONS = {
+    1: 'Активности',
+    2: 'Таблица активности',
+    3: 'График активности за две недели',
+    4: 'График активности за все время',
+    5: 'График среднего времени активности по неделям',
+    6: 'График активности в виде круга',
+    7: 'Инструкция',
+    8: 'Завершить сессию (Ctrl + C)',
+}
 FILE_PATHS = {
     3: 'bar.py',
     4: 'map.py',
@@ -43,11 +43,11 @@ def clear_screen() -> None:
 
 def date_request() -> int:
     while True:
-        for ind, name in enumerate(OPTIONS, start=1):
-            print(f'{green}{ind}{white}: {name}')
+        for ind, name in OPTIONS.items():
+            print(f'{GREEN}{ind}{WHITE}: {name}')
         try:
             activity_operation = int(input('\nВвод: '))
-            if activity_operation in (1, 2, 3, 4, 5, 6, 7, 8):
+            if activity_operation in OPTIONS.keys():
                 return activity_operation
             else:
                 raise ValueError
@@ -77,7 +77,7 @@ def call_file(file_path: str) -> None:
         subprocess.run([sys.executable, os.path.abspath(file_path)])
         clear_screen()
     else:
-        input(f'\n{red}Список занятий пуст{white}')
+        input(f'\n{RED}Список занятий пуст{WHITE}')
         clear_screen()
 
 
@@ -101,7 +101,7 @@ def run_activity() -> None:
                     call_activity_table()
                     clear_screen()
                 else:
-                    input(f'\n{red}Список занятий пуст{white}')
+                    input(f'\n{RED}Список занятий пуст{WHITE}')
                     clear_screen()
             elif activity_operation == 7:
                 clear_screen()

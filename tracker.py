@@ -5,15 +5,15 @@ from time import time
 
 from setup import setup
 from utils import (
-    cyan,
-    generate_activites_times,
-    green,
-    h,
-    m,
-    magenta,
-    red,
-    s,
-    white,
+    CYAN,
+    GREEN,
+    HOUR,
+    MAGENTA,
+    MINUTE,
+    RED,
+    SECOND,
+    WHITE,
+    generate_activities_times,
 )
 
 saved = True
@@ -23,7 +23,7 @@ activities = []
 from save import *
 
 ARGS, ACTIVITIES = setup('tracker')
-weeks = (timestamp - activities[0][1]) // (7 * 24 * h) if activities else 0
+weeks = (timestamp - activities[0][1]) // (7 * 24 * HOUR) if activities else 0
 CONSOLE_COMMAND_CLEAR = 'cls' if os.name == 'nt' else 'clear'
 
 
@@ -51,7 +51,7 @@ def data_save(saved=True) -> None:
     # Weekly dump
     global weeks
     if saved and activities:
-        if (timestamp - activities[0][1]) // (7 * 24 * h) > weeks:
+        if (timestamp - activities[0][1]) // (7 * 24 * HOUR) > weeks:
             weeks += 1
 
             filename = (
@@ -61,7 +61,7 @@ def data_save(saved=True) -> None:
 
             with open(filename, 'w') as file:
                 file.write(
-                    f'{saved = }\ntimestamp = {activities[0][1] + weeks * 7 * 24 * h}\n'
+                    f'{saved = }\ntimestamp = {activities[0][1] + weeks * 7 * 24 * HOUR}\n'
                 )
                 if not activities:
                     file.write('activities = []\n')
@@ -84,12 +84,12 @@ def stages_formatter(stages: int, verb=0) -> str:
     last_2_digits = int(str(stages)[-2:])
 
     if last_digit == 1 and last_2_digits != 11:
-        return f'{magenta}{stages}{white} {form[0]}'
+        return f'{MAGENTA}{stages}{WHITE} {form[0]}'
 
     if 1 <= last_digit <= 4 and (last_2_digits < 10 or last_2_digits > 20):
-        return f'{magenta}{stages}{white} {form[1]}'
+        return f'{MAGENTA}{stages}{WHITE} {form[1]}'
 
-    return f'{magenta}{stages}{white} {form[2]}'
+    return f'{MAGENTA}{stages}{WHITE} {form[2]}'
 
 
 def analytics() -> None:
@@ -99,10 +99,10 @@ def analytics() -> None:
     sum_all = timestamp - activities[0][1]
     print(
         f'Итоги {stages_formatter(len(activities), 1)} '
-        f'({cyan}{timedelta(0, round(sum_all))}{white})'
+        f'({CYAN}{timedelta(0, round(sum_all))}{WHITE})'
     )
     print()
-    activities_times = generate_activites_times(activities, timestamp)
+    activities_times = generate_activities_times(activities, timestamp)
     save_activities = set([i[0] for i in activities])
 
     # Analyze all data
@@ -120,8 +120,8 @@ def analytics() -> None:
 
         print(
             f'{activity_name} ({stages_formatter(activity_counter)}) ({round(activity_percentage, 2)}%)\n'
-            f'Всего: {cyan}{timedelta(0, round(activity_time))}{white}\n'
-            f'В среднем {cyan}{timedelta(0, round(activity_mean))}{white} за этап\n'
+            f'Всего: {CYAN}{timedelta(0, round(activity_time))}{WHITE}\n'
+            f'В среднем {CYAN}{timedelta(0, round(activity_mean))}{WHITE} за этап\n'
         )
     input()
 
@@ -130,7 +130,7 @@ def clear_activities() -> None:
     global activities
     activities.clear()
     data_save()
-    input(f'\n{cyan}Все активности удалены{white}')
+    input(f'\n{CYAN}Все активности удалены{WHITE}')
     clear_screen()
 
     # Error checking
@@ -139,7 +139,7 @@ def clear_activities() -> None:
             f'Последняя сессия была прервана: {activities[-1][0]} ({activities[-1][2]})'
         )
         input(
-            f'Добавление потерянного времени: {cyan}+{timedelta(0, int(time() - timestamp))}{white}\n'
+            f'Добавление потерянного времени: {CYAN}+{timedelta(0, int(time() - timestamp))}{WHITE}\n'
         )
 
         timestamp: float = time()
@@ -151,20 +151,19 @@ while True:
 
     # Header
     activity = len(activities)
-    stageline = f'{red}Список занятий пуст{white}'
+    stageline = f'{RED}Список занятий пуст{WHITE}'
 
-    # Изменено
     if activities:
         stageline = (
-            f"Этап {magenta}{activity}{white}, {activities[-1][0]} "
+            f"Этап {MAGENTA}{activity}{WHITE}, {activities[-1][0]} "
             f"({datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')}) "
-            f"({cyan}{timedelta(0, round(timestamp - activities[-1][1]))}{white})\n"
+            f"({CYAN}{timedelta(0, round(timestamp - activities[-1][1]))}{WHITE})\n"
         )
         print(stageline)
     # Activities
     print('Выбор занятия:')
     for i, name in enumerate(ACTIVITIES, start=1):
-        print(f'{green}{i}{white}: {name}')
+        print(f'{GREEN}{i}{WHITE}: {name}')
 
     print()
 
@@ -177,7 +176,7 @@ while True:
             'Удалить все занятия',
         )
     ):
-        print(f"{green}{'edcif'[ind]}{white}: {name}")
+        print(f"{GREEN}{'edcif'[ind]}{WHITE}: {name}")
 
     # Gain input
     try:
@@ -186,7 +185,7 @@ while True:
         exit()  # Первый этап выхода из tracker
     except Exception as exc:
         print()
-        input(f'\n{red}Неверный ввод{white}')
+        input(f'\n{RED}Неверный ввод{WHITE}')
         continue
 
     if session_id.isdigit():
@@ -243,8 +242,9 @@ while True:
             print(f'Удалить: {activities[-1][0]} ({activities[-1][2]})?')
             if input('y/n: ').lower() == 'y':
                 activities.pop()
+                input(f'\n{CYAN}Активность удалена{WHITE}')
             else:
-                input(f'\n{red}Удаление отменено{white}')
+                input(f'\n{RED}Удаление отменено{WHITE}')
 
     # Change last activity time
     if session_id == len(ACTIVITIES) + 3:
@@ -256,10 +256,10 @@ while True:
             activity_lasts = timedelta(0, round(timestamp - activities[-1][1]))
 
             print(
-                f'Формат ввода времени: {green}15*h + 4*m + 12*s{white} ({cyan}h{white} - часы, {cyan}m{white} - минуты, {cyan}s{white} - секунды)\n'
+                f'Формат ввода времени: {GREEN}15*HOUR + 4*MINUTE + 12*SECOND{WHITE} ({CYAN}HOUR{WHITE} - часы, {CYAN}MINUTE{WHITE} - минуты, {CYAN}SECOND{WHITE} - секунды)\n'
             )
             print(
-                f'Последний этап: {activity_name} ({activity_start_time}) {cyan}{activity_lasts}{white}'
+                f'Последний этап: {activity_name} ({activity_start_time}) {CYAN}{activity_lasts}{WHITE}'
             )
             try:
                 allocated_time = eval(input('Этап закончился раньше на: '))
@@ -270,15 +270,15 @@ while True:
                         0, round(timestamp - activities[-1][1])
                     )
                     input(
-                        f'\nНовая продолжительность этапа: {cyan}{activity_lasts}{white}'
+                        f'\nНовая продолжительность этапа: {CYAN}{activity_lasts}{WHITE}'
                     )
 
                 else:
                     input(
-                        f'\n{red}Этап становится отрицательным, действие отменено{white}'
+                        f'\n{RED}Этап становится отрицательным, действие отменено{WHITE}'
                     )
             except BaseException as val:
-                input(f'\n\n{red}Действие отменено{white}')
+                input(f'\n\n{RED}Действие отменено{WHITE}')
 
     # Add a note
     if session_id == len(ACTIVITIES) + 4:
@@ -290,7 +290,7 @@ while True:
             activity_lasts = timedelta(0, round(timestamp - activities[-1][1]))
 
             print(
-                f'Добавление подписи к предыдущему занятию\n{activity_name} ({activity_start_time}) {cyan}{activity_lasts}{white}'
+                f'Добавление подписи к предыдущему занятию\n{activity_name} ({activity_start_time}) {CYAN}{activity_lasts}{WHITE}'
             )
             note = input('\nПодпись: ')
 
@@ -304,6 +304,6 @@ while True:
             if input('y/n: ').lower() == 'y':
                 clear_activities()
             else:
-                input(f'\n{red}Удаление отменено{white}')
+                input(f'\n{RED}Удаление отменено{WHITE}')
 
     data_save()

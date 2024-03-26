@@ -5,7 +5,7 @@ import save
 from PIL import Image
 
 from setup import setup
-from utils import create_graphics_directory_path, d, h, w
+from utils import create_graphics_directory_path, DAY, HOUR, WEEK
 
 ARGS, ACTIVITIES = setup("circles")
 all_experiment_time = save.timestamp - save.activities[0][1]
@@ -14,7 +14,7 @@ GRAPH_NAME = 'circles'
 
 start_radius = ARGS["START_RADIUS"]
 image_side = (
-    round((start_radius + all_experiment_time / w)) * 2 + 8
+    round((start_radius + all_experiment_time / WEEK)) * 2 + 8
     if ARGS["IMAGE_SIDE"] == "auto"
     else ARGS["IMAGE_SIDE"]
 )
@@ -29,12 +29,12 @@ for i, activity in enumerate(save.activities):
     if activity_name == ARGS["VOID"]:
         continue
 
-    x = (timestamp + ARGS["UTC_OFFSET"]) % d / h
+    x = (timestamp + ARGS["UTC_OFFSET"]) % DAY / HOUR
 
     if i != len(save.activities) - 1:
-        days = (timestamp - experiment_start_time) / d
+        days = (timestamp - experiment_start_time) / DAY
     else:
-        days = (save.timestamp - experiment_start_time) / d
+        days = (save.timestamp - experiment_start_time) / DAY
 
     y = round(cos(pi * x / 12) * (start_radius + days / 7) - image_side / 2)
     x = round(sin(pi * x / 12) * (start_radius + days / 7) + image_side / 2)

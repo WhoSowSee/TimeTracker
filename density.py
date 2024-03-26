@@ -5,14 +5,14 @@ from matplotlib.ticker import MultipleLocator, PercentFormatter
 import save
 from setup import setup
 from utils import (
-    create_graphics_directory_path,
-    generate_activites_times,
-    normalize_color,
-    w,
+	create_graphics_directory_path,
+	generate_activities_times,
+	normalize_color,
+	WEEK,
 )
 
 ARGS, ACTIVITIES = setup("density")
-activities_times = generate_activites_times(save.activities, save.timestamp)
+activities_times = generate_activities_times(save.activities, save.timestamp)
 GRAPH_NAME = 'density'
 
 bars = {}
@@ -65,7 +65,7 @@ def construct_bars(week):
 
 # Process all activities and add them to plot
 stage = 1
-period = w * (stage if ARGS["CUMULATIVE"] else 1)
+period = WEEK * (stage if ARGS["CUMULATIVE"] else 1)
 
 for i in range(len(save.activities)):
     activity = save.activities[i]
@@ -84,7 +84,7 @@ for i in range(len(save.activities)):
                 period_times[activity_name] = 0
 
         stage += 1
-        period = w * (stage if ARGS["CUMULATIVE"] else 1)
+        period = WEEK * (stage if ARGS["CUMULATIVE"] else 1)
         total_time = sum([period_times[theme] for theme in period_times])
 
     else:
@@ -92,7 +92,7 @@ for i in range(len(save.activities)):
 
 else:
     # Create data for last not full week
-    if (total_time + this_activity_time) % w != 0:
+    if (total_time + this_activity_time) % WEEK != 0:
         construct_bars(stage)
         stage += 1
 

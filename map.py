@@ -6,18 +6,18 @@ from matplotlib.patches import Patch
 import save
 from setup import setup
 from utils import (
-    create_graphics_directory_path,
     DAY,
-    generate_activities_times,
     HOUR,
     MINUTE,
-    normalize_color,
     WEEK,
+    create_graphics_directory_path,
+    generate_activities_times,
+    normalize_color,
 )
 
-ARGS, ACTIVITIES = setup("map")
-activities_times = generate_activities_times(save.activities, save.timestamp)
 GRAPH_NAME = 'map'
+ARGS, ACTIVITIES = setup(GRAPH_NAME)
+activities_times = generate_activities_times(save.activities, save.timestamp)
 
 # Create plot canvas
 fig, axs = plt.subplot_mosaic(
@@ -107,7 +107,11 @@ days_of_week = ("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
 
 def format_coord(x, y):
     x = int(x - 0.5)
-    y = round(y / HOUR) if round(y / HOUR, 1) == round(y / HOUR) else round(y / HOUR, 1)
+    y = (
+        round(y / HOUR)
+        if round(y / HOUR, 1) == round(y / HOUR)
+        else round(y / HOUR, 1)
+    )
 
     selected_time = x * DAY + y * HOUR + experiment_start_time - start_hour
 

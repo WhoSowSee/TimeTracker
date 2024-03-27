@@ -17,9 +17,9 @@ from utils import (
     normalize_color,
 )
 
-ARGS, ACTIVITIES = setup('bar')
-activities_times = generate_activities_times(save.activities, save.timestamp)
 GRAPH_NAME = 'bar'
+ARGS, ACTIVITIES = setup(GRAPH_NAME)
+activities_times = generate_activities_times(save.activities, save.timestamp)
 
 save_activities = set([i[0] for i in save.activities])
 average_day = {

@@ -36,7 +36,6 @@ FILE_PATHS = {
 }
 
 
-# Если система Windows -> cls, иначе -> clear
 def clear_screen() -> None:
     os.system(CONSOLE_COMMAND_CLEAR)
 

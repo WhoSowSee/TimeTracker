@@ -5,15 +5,15 @@ from matplotlib.ticker import MultipleLocator, PercentFormatter
 import save
 from setup import setup
 from utils import (
-	create_graphics_directory_path,
-	generate_activities_times,
-	normalize_color,
-	WEEK,
+    WEEK,
+    create_graphics_directory_path,
+    generate_activities_times,
+    normalize_color,
 )
 
-ARGS, ACTIVITIES = setup("density")
-activities_times = generate_activities_times(save.activities, save.timestamp)
 GRAPH_NAME = 'density'
+ARGS, ACTIVITIES = setup(GRAPH_NAME)
+activities_times = generate_activities_times(save.activities, save.timestamp)
 
 bars = {}
 period_times = {activity_name: 0 for activity_name in ACTIVITIES}

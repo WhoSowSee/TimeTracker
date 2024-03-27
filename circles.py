@@ -1,16 +1,16 @@
 from math import cos, pi, sin
 
 import numpy
-import save
 from PIL import Image
 
+import save
 from setup import setup
-from utils import create_graphics_directory_path, DAY, HOUR, WEEK
+from utils import DAY, HOUR, WEEK, create_graphics_directory_path
 
-ARGS, ACTIVITIES = setup("circles")
+GRAPH_NAME = 'circles'
+ARGS, ACTIVITIES = setup(GRAPH_NAME)
 all_experiment_time = save.timestamp - save.activities[0][1]
 experiment_start_time = save.activities[0][1]
-GRAPH_NAME = 'circles'
 
 start_radius = ARGS["START_RADIUS"]
 image_side = (
@@ -47,7 +47,7 @@ image_side *= ARGS["IMAGE_SCALE"]
 image = Image.fromarray(image)
 image = image.transpose(Image.Transpose.ROTATE_90)
 image = image.resize((image_side, image_side), resample=Image.Resampling.BOX)
-image.save(create_graphics_directory_path())
+image.save(create_graphics_directory_path(GRAPH_NAME))
 
 if not ARGS["SILENT"]:
     image.show()

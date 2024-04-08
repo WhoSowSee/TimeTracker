@@ -1,3 +1,4 @@
+import importlib
 import os
 from datetime import datetime, timedelta
 from os import makedirs, path, system
@@ -19,7 +20,7 @@ from utils import (
 saved = True
 timestamp: float = time()
 activities = []
-
+import save
 from save import *
 
 ARGS, ACTIVITIES = setup('tracker')
@@ -41,12 +42,6 @@ def data_save(saved=True) -> None:
             for i in activities:
                 file.write(f'\t{i},\n')
             file.write(']\n')
-
-        # Alternative
-        # file.write('activities = [\n')
-        # for i in activities:
-        #     file.write(f'\t{i},\n')
-        # file.write(']\n')
 
     # Weekly dump
     global weeks
@@ -72,9 +67,10 @@ def data_save(saved=True) -> None:
                     file.write(']\n')
 
 
-# Функция, которая форматирует вывод числа stages в соответствии с правилами русского языка для
-# согласования числительных и существительных.
 def stages_formatter(stages: int, verb=0) -> str:
+    """
+    Функция, которая форматирует вывод числа stages в соответствии с правилами русского языка для согласования числительных и существительных.
+    """
     if verb:
         form = ['этапа', 'этапов', 'этапов']
     else:
@@ -130,7 +126,7 @@ def clear_activities() -> None:
     global activities
     activities.clear()
     data_save()
-    input(f'\n{CYAN}Все активности удалены{WHITE}')
+    input(f'\n{CYAN}Все занятия удалены{WHITE}')
     clear_screen()
 
     # Error checking
@@ -242,7 +238,8 @@ while True:
             print(f'Удалить: {activities[-1][0]} ({activities[-1][2]})?')
             if input('y/n: ').lower() == 'y':
                 activities.pop()
-                input(f'\n{CYAN}Активность удалена{WHITE}')
+                importlib.reload(save)
+                input(f'\n{CYAN}Занятие удалено{WHITE}')
             else:
                 input(f'\n{RED}Удаление отменено{WHITE}')
 
@@ -303,6 +300,7 @@ while True:
             print('Вы уверены, что хотите удалить все занятия?')
             if input('y/n: ').lower() == 'y':
                 clear_activities()
+                importlib.reload(save)
             else:
                 input(f'\n{RED}Удаление отменено{WHITE}')
 

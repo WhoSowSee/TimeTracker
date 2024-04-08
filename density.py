@@ -155,17 +155,19 @@ percentages_max = round(
     1 + 2,
 )
 
+
 ax[0][1].format_coord = format_coord
 
 ax[0][1].set_xticks([i for i in range(1, stage)], [i for i in range(1, stage)])
 ax[0][1].set_xlim(0.5, stage - 0.5)
-
 ax[0][1].set_ylim(0, percentages_max)
+
 ax[0][1].yaxis.set_major_formatter(PercentFormatter(1.0))
 ax[0][1].yaxis.set_major_locator(MultipleLocator(percentages_max / 10))
 
 plt.tight_layout()
 plt.savefig(create_graphics_directory_path(GRAPH_NAME), bbox_inches="tight")
+
 
 if not ARGS["SILENT"]:
     plt.show()

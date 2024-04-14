@@ -1,4 +1,3 @@
-import importlib
 import os
 from datetime import datetime, timedelta
 from os import makedirs, path, system
@@ -20,7 +19,6 @@ from utils import (
 saved = True
 timestamp: float = time()
 activities = []
-import save
 from save import *
 
 ARGS, ACTIVITIES = setup('tracker')
@@ -238,7 +236,7 @@ while True:
             print(f'Удалить: {activities[-1][0]} ({activities[-1][2]})?')
             if input('y/n: ').lower() == 'y':
                 activities.pop()
-                importlib.reload(save)
+
                 input(f'\n{CYAN}Занятие удалено{WHITE}')
             else:
                 input(f'\n{RED}Удаление отменено{WHITE}')
@@ -300,7 +298,6 @@ while True:
             print('Вы уверены, что хотите удалить все занятия?')
             if input('y/n: ').lower() == 'y':
                 clear_activities()
-                importlib.reload(save)
             else:
                 input(f'\n{RED}Удаление отменено{WHITE}')
 

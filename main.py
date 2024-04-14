@@ -23,16 +23,14 @@ OPTIONS = {
     2: 'Таблица активности',
     3: 'График активности за две недели',
     4: 'График активности за все время',
-    5: 'График среднего времени активности по неделям',
-    6: 'График активности в виде круга',
-    7: 'Инструкция',
-    8: 'Завершить сессию (Ctrl + C)',
+    5: 'График активности в виде круга',
+    6: 'Инструкция',
+    7: 'Завершить сессию (Ctrl + C)',
 }
 FILE_PATHS = {
     3: 'bar.py',
     4: 'map.py',
-    5: 'density.py',
-    6: 'circles.py',
+    5: 'circles.py',
 }
 
 
@@ -82,13 +80,13 @@ def call_file(file_path: str) -> None:
 
 def run_activity() -> None:
     while True:
+        importlib.reload(save)
         try:
             activity_operation: int = date_request()
             if activity_operation in FILE_PATHS:
-                importlib.reload(save)
                 call_file(FILE_PATHS[activity_operation])
             match activity_operation:
-                case 8:
+                case 7:
                     clear_screen()
                     sys.exit()  # Выход из main
                 case 1:
@@ -105,7 +103,7 @@ def run_activity() -> None:
                     else:
                         input(f'\n{RED}Список занятий пуст{WHITE}')
                         clear_screen()
-                case 7:
+                case 6:
                     clear_screen()
                     with open('instruction.md', 'r') as f:
                         markdown_text = f.read()

@@ -127,22 +127,24 @@ def clear_activities() -> None:
     input(f'\n{CYAN}Все занятия удалены{WHITE}')
     clear_screen()
 
-    # Error checking
-    if not saved:
-        input(
-            f'Последняя сессия была прервана: {activities[-1][0]} ({activities[-1][2]})'
-        )
-        input(
-            f'Добавление потерянного времени: {CYAN}+{timedelta(0, int(time() - timestamp))}{WHITE}\n'
-        )
 
-        timestamp: float = time()
-        data_save()
+# Error checking
+if not saved:
+    input(
+        f'Последняя сессия была прервана: {activities[-1][0]} ({activities[-1][2]})'
+    )
+    input(
+        f'Добавление потерянного времени: {CYAN}+{timedelta(0, int(time() - timestamp))}{WHITE}\n'
+    )
+
+    timestamp: float = time()
+    data_save()
 
 
 while True:
     clear_screen()
 
+    timestamp = time()
     # Header
     activity = len(activities)
     stageline = f'{RED}Список занятий пуст{WHITE}'
@@ -155,6 +157,7 @@ while True:
         )
         print(stageline)
     # Activities
+
     print('Выбор занятия:')
     for i, name in enumerate(ACTIVITIES, start=1):
         print(f'{GREEN}{i}{WHITE}: {name}')
@@ -207,14 +210,31 @@ while True:
             if activity_name == ARGS['ANOTHER']:
                 note = input('Подпись: ') or (ARGS['ANOTHER_DEFAULT_NOTE'])
 
+            # TODO: Test
+            current_time = time()  # Получаем текущее время
             activities.append(
                 [
                     f'{activity_name}',
-                    timestamp,
-                    f"{datetime.fromtimestamp(timestamp).strftime('%d.%m.%Y %H:%M:%S')}",
+                    current_time,  # Используем текущее время в качестве времени начала активности
+                    f"{datetime.fromtimestamp(current_time).strftime('%d.%m.%Y %H:%M:%S')}",
                     note,
                 ]
             )
+
+            # Вычисление длительности активности
+            activity_duration = (
+                current_time - activities[-1][1]
+            )  # Разница между текущим временем и временем начала активности
+            activity_lasts = timedelta(seconds=round(activity_duration))
+
+            # activities.append(
+            #     [
+            #         f'{activity_name}',
+            #         timestamp,
+            #         f"{datetime.fromtimestamp(timestamp).strftime('%d.%m.%Y %H:%M:%S')}",
+            #         note,
+            #     ]
+            # )
 
         # Wait for input to end session
         data_save(saved=False)

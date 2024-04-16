@@ -56,7 +56,7 @@ def bar_constructor(x, y):
             color=normalize_color(ACTIVITIES[activity[0]]),
         )
 
-        if y >= DAY * ARGS['LABEL_TRESHOLD']:
+        if y >= DAY * ARGS['LABEL_THRESHOLD']:
             ax[0][1].text(
                 x=x,
                 y=y / 2 + offset,
@@ -207,7 +207,7 @@ for activity in average_day:
 
         if (
             average_day[activity]
-            >= all_experiment_time * ARGS['AV_LABEL_TRESHOLD']
+            >= all_experiment_time * ARGS['AV_LABEL_THRESHOLD']
         ):
             ax[1][1].text(
                 x=1,

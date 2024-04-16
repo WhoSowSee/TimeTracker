@@ -210,12 +210,11 @@ while True:
             if activity_name == ARGS['ANOTHER']:
                 note = input('Подпись: ') or (ARGS['ANOTHER_DEFAULT_NOTE'])
 
-            # TODO: Test
-            current_time = time()  # Получаем текущее время
+            current_time = time()
             activities.append(
                 [
                     f'{activity_name}',
-                    current_time,  # Используем текущее время в качестве времени начала активности
+                    current_time,
                     f"{datetime.fromtimestamp(current_time).strftime('%d.%m.%Y %H:%M:%S')}",
                     note,
                 ]
@@ -226,15 +225,6 @@ while True:
                 current_time - activities[-1][1]
             )  # Разница между текущим временем и временем начала активности
             activity_lasts = timedelta(seconds=round(activity_duration))
-
-            # activities.append(
-            #     [
-            #         f'{activity_name}',
-            #         timestamp,
-            #         f"{datetime.fromtimestamp(timestamp).strftime('%d.%m.%Y %H:%M:%S')}",
-            #         note,
-            #     ]
-            # )
 
         # Wait for input to end session
         data_save(saved=False)
@@ -271,7 +261,7 @@ while True:
             activity_lasts = timedelta(0, round(timestamp - activities[-1][1]))
 
             print(
-                f'Формат ввода времени: {GREEN}15*HOUR + 4*MINUTE + 12*SECOND{WHITE} ({CYAN}HOUR{WHITE} - часы, {CYAN}MINUTE{WHITE} - минуты, {CYAN}SECOND{WHITE} - секунды)\n'
+                f'Формат ввода времени: {GREEN}15*HOUR + 4*MINUTE + 12*SECOND{WHITE}\n'
             )
             print(
                 f'Последний этап: {activity_name} ({activity_start_time}) {CYAN}{activity_lasts}{WHITE}'

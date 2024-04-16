@@ -14,7 +14,7 @@ VOID = "Void"
 UTC_OFFSET = "auto"  # "auto" | <int seconds>
 
 # For scripts that generates images and plots
-SILENT = false  # -SECOND --silent
+SILENT = false  # -s --silent
 
 [tracker]
 ANOTHER = "Другое"
@@ -23,51 +23,51 @@ ANOTHER_DEFAULT_NOTE = "Магазин"
 [bar]
 HIDE_VOID = false
 
-LABEL_TRESHOLD = 0.04     # -t <float>
-AV_LABEL_TRESHOLD = 0.04  # -avt <float>
+LABEL_THRESHOLD = 0.04     # -t <float>
+AV_LABEL_THRESHOLD = 0.04  # -avt <float>
 
 SHOW_LEGEND = true  # -l
 LEGEND_COLUMNS = 1  # -lc <int>
 
-PLOT_WIDTH = 9     # -WEEK <float>
-PLOT_HEIGHT = 5.7  # -HOUR <float>
+PLOT_WIDTH = 9     # -w <float>
+PLOT_HEIGHT = 5.7  # -h <float>
 
 [barh]
 HIDE_VOID = false  # -v
 
-LABEL_TRESHOLD = 0.04      # -t <float>
-AV_LABEL_TRESHOLD = 0.042  # -avt <float>
+LABEL_THRESHOLD = 0.04      # -t <float>
+AV_LABEL_THRESHOLD = 0.042  # -avt <float>
 
 SHOW_LEGEND = true  # -l
 LEGEND_COLUMNS = 1  # -lc <int>
 
-PLOT_WIDTH = 9     # -WEEK <float>
-PLOT_HEIGHT = 5.7  # -HOUR <float>
+PLOT_WIDTH = 9     # -w <float>
+PLOT_HEIGHT = 5.7  # -h <float>
 
 [map]
 SHOW_LEGEND = true  # -l
 LEGEND_COLUMNS = 1  # -lc <int>
 
-PLOT_WIDTH = 13.5  # -WEEK <float>
-PLOT_HEIGHT = 5.7  # -HOUR <float>
+PLOT_WIDTH = 13.5  # -w <float>
+PLOT_HEIGHT = 5.7  # -h <float>
 
 [density]
 CUMULATIVE = false  # -c
 
-SILENT = false     # -SECOND --silent
+SILENT = false     # -s --silent
 HIDE_VOID = false  # -v
 
-LABEL_TRESHOLD = 0.07  # -t <float>
+LABEL_THRESHOLD = 0.07  # -t <float>
 
 SHOW_LEGEND = true  # -l
 LEGEND_COLUMNS = 1  # -lc <int>
 
-PLOT_WIDTH = 13.5  # -WEEK <float>
-PLOT_HEIGHT = 5.7  # -HOUR <float>
+PLOT_WIDTH = 13.5  # -w <float>
+PLOT_HEIGHT = 5.7  # -h <float>
 
 [circles]
 COLOR_BG = [21, 23, 32]
 
 START_RADIUS = 16    # -r <int>
-IMAGE_SIDE = "auto"  # -HOUR <auto | int>
+IMAGE_SIDE = "auto"  # -h <auto | int>
 IMAGE_SCALE = 4      # -x <int>

@@ -260,29 +260,45 @@ while True:
             activity_start_time = activities[-1][2]
             activity_lasts = timedelta(0, round(timestamp - activities[-1][1]))
 
-            print(
-                f'Формат ввода времени: {GREEN}15*HOUR + 4*MINUTE + 12*SECOND{WHITE}\n'
-            )
+            print(f'Формат ввода времени: {GREEN}15*h + 4*m + 12*s{WHITE}\n')
             print(
                 f'Последний этап: {activity_name} ({activity_start_time}) {CYAN}{activity_lasts}{WHITE}'
             )
             try:
-                allocated_time = eval(input('Этап закончился раньше на: '))
-                if allocated_time < activity_lasts.total_seconds():
-                    timestamp -= allocated_time
+                time_input = input('Этап закончился раньше на: ')
+                time_parts = time_input.split('+')
+                hours = 0
+                minutes = 0
+                seconds = 0
 
+                for part in time_parts:
+                    part = part.strip()
+                    if part.endswith('*h'):
+                        hours = int(part[:-2])
+                    elif part.endswith('*m'):
+                        minutes = int(part[:-2])
+                    elif part.endswith('*s'):
+                        seconds = int(part[:-2])
+                    else:
+                        raise ValueError
+                allocated_time = (
+                    hours * HOUR + minutes * MINUTE + seconds * SECOND
+                )
+                if allocated_time < activity_lasts.total_seconds():
+                    activities[-1][1] += allocated_time
                     activity_lasts = timedelta(
                         0, round(timestamp - activities[-1][1])
                     )
                     input(
                         f'\nНовая продолжительность этапа: {CYAN}{activity_lasts}{WHITE}'
                     )
-
                 else:
                     input(
-                        f'\n{RED}Этап становится отрицательным, действие отменено{WHITE}'
+                        f'\n{RED}Длительность этапа становится отрицательной, действие отменено{WHITE}'
                     )
-            except BaseException as val:
+            except Exception as val:
+                input(f'\n{RED}Действие отменено{WHITE}')
+            except KeyboardInterrupt as val:
                 input(f'\n\n{RED}Действие отменено{WHITE}')
 
     # Add a note

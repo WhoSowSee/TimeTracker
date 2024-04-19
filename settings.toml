@@ -18,7 +18,7 @@ SILENT = false  # -s --silent
 
 [tracker]
 ANOTHER = "Другое"
-ANOTHER_DEFAULT_NOTE = "Магазин"
+ANOTHER_DEFAULT_NOTE = "Программирование"
 
 [bar]
 HIDE_VOID = false

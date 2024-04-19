@@ -6,6 +6,7 @@ from time import time
 from setup import setup
 from utils import (
     CYAN,
+    DAY,
     GREEN,
     HOUR,
     MAGENTA,
@@ -185,6 +186,7 @@ while True:
         input(f'\n{RED}Неверный ввод{WHITE}')
         continue
 
+    session_id = session_id.replace('е', 'e').replace('с', 'c')
     if session_id.isdigit():
         session_id = int(session_id)
     elif session_id in ('e', 'd', 'c', 'i', 'f'):
@@ -228,7 +230,7 @@ while True:
 
         # Wait for input to end session
         data_save(saved=False)
-        input(f"<< {activity_name}{'' if not note else ' (' + note + ')'} >>")
+        input(f"<< {activity_name}{' (' + note + ')' if note else ''} >>")
 
         timestamp: float = time()
 
@@ -260,30 +262,37 @@ while True:
             activity_start_time = activities[-1][2]
             activity_lasts = timedelta(0, round(timestamp - activities[-1][1]))
 
-            print(f'Формат ввода времени: {GREEN}15*h + 4*m + 12*s{WHITE}\n')
+            print(f'Формат ввода времени: {GREEN}1d + 15h + 4m + 12s{WHITE}\n')
             print(
                 f'Последний этап: {activity_name} ({activity_start_time}) {CYAN}{activity_lasts}{WHITE}'
             )
             try:
                 time_input = input('Этап закончился раньше на: ')
                 time_parts = time_input.split('+')
+                days = 0
                 hours = 0
                 minutes = 0
                 seconds = 0
 
                 for part in time_parts:
                     part = part.strip()
-                    if part.endswith('*h'):
-                        hours = int(part[:-2])
-                    elif part.endswith('*m'):
-                        minutes = int(part[:-2])
-                    elif part.endswith('*s'):
-                        seconds = int(part[:-2])
+                    if part.endswith('d'):
+                        days = int(part[:-1])
+                    elif part.endswith('h'):
+                        hours = int(part[:-1])
+                    elif part.endswith('m'):
+                        minutes = int(part[:-1])
+                    elif part.endswith('s'):
+                        seconds = int(part[:-1])
                     else:
                         raise ValueError
                 allocated_time = (
-                    hours * HOUR + minutes * MINUTE + seconds * SECOND
+                    days * DAY
+                    + hours * HOUR
+                    + minutes * MINUTE
+                    + seconds * SECOND
                 )
+
                 if allocated_time < activity_lasts.total_seconds():
                     activities[-1][1] += allocated_time
                     activity_lasts = timedelta(

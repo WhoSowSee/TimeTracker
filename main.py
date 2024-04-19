@@ -21,16 +21,18 @@ CONSOLE_COMMAND_CLEAR = 'cls' if os.name == 'nt' else 'clear'
 OPTIONS = {
     1: 'Активности',
     2: 'Таблица активности',
-    3: 'График активности за две недели',
-    4: 'График активности за все время',
-    5: 'График активности в виде круга',
-    6: 'Инструкция',
-    7: 'Завершить сессию (Ctrl + C)',
+    3: 'Вертикальный график активности за две недели',
+    4: 'Горизонтальный график активности за две недели',
+    5: 'График активности за все время',
+    6: 'График активности в виде круга',
+    7: 'Инструкция',
+    8: 'Завершить сессию (Ctrl + C)',
 }
 FILE_PATHS = {
     3: 'bar.py',
-    4: 'map.py',
-    5: 'circles.py',
+    4: 'barh.py',
+    5: 'map.py',
+    6: 'circles.py',
 }
 
 
@@ -70,8 +72,8 @@ def call_activity_table() -> None:
 def call_file(file_path: str) -> None:
     if save.activities:
         for _ in trange(100, desc='Генерация графика'):
-            time.sleep(0.03)
-        subprocess.run([sys.executable, os.path.abspath(file_path)])
+            time.sleep(0.02)
+        subprocess.run([sys.executable, file_path])
         clear_screen()
     else:
         input(f'\n{RED}Список занятий пуст{WHITE}')
@@ -86,16 +88,13 @@ def run_activity() -> None:
             if activity_operation in FILE_PATHS:
                 call_file(FILE_PATHS[activity_operation])
             match activity_operation:
-                case 7:
+                case 8:
                     clear_screen()
                     sys.exit()  # Выход из main
                 case 1:
-                    subprocess.run(
-                        [sys.executable, os.path.abspath('tracker.py')]
-                    )
+                    subprocess.run([sys.executable, 'tracker.py'])
                     clear_screen()
                 case 2:
-                    importlib.reload(save)
                     if save.activities:
                         clear_screen()
                         call_activity_table()
@@ -103,7 +102,7 @@ def run_activity() -> None:
                     else:
                         input(f'\n{RED}Список занятий пуст{WHITE}')
                         clear_screen()
-                case 6:
+                case 7:
                     clear_screen()
                     with open('instruction.md', 'r') as f:
                         markdown_text = f.read()
@@ -112,7 +111,6 @@ def run_activity() -> None:
                     clear_screen()
         except KeyboardInterrupt:
             clear_screen()
-            # TODO: Сделать возможность выхода из tracker в main по Ctrl + C
             sys.exit()  # Полный выход из tracker
 
 

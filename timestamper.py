@@ -6,22 +6,18 @@ from time import mktime
 # unix-time: 1690364899.123
 
 timestamp = input("Введите unix-time метку или дату: ")
+
 try:
     if timestamp.count(':'):
         # data -> unix-time
         print(
-            "Unix-time метка:",
-            mktime(
-                datetime.strptime(timestamp, "%d.%m.%Y %H:%M:%S").timetuple()
-            ),
+            f'Unix-time метка: {mktime(datetime.strptime(timestamp, "%d.%m.%Y %H:%M:%S").timetuple())}'
         )
     else:
         # unix-time -> data
         print(
-            "Дата:",
-            datetime.fromtimestamp(float(timestamp)).strftime(
-                "%d.%m.%Y %H:%M:%S"
-            ),
+            f'Дата: {datetime.fromtimestamp(float(timestamp)).strftime("%d.%m.%Y %H:%M:%S")}'
         )
+
 except (ValueError, TypeError):
     ...

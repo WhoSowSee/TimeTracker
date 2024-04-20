@@ -90,8 +90,9 @@ for activity in save.activities:
         # Create bars, separated by days
         while to_distribute != 0:
             days += 1
-            offset = 0
-
+            # offset = 0
+            offset -= DAY
+            
             if to_distribute >= DAY:
                 bar_constructor(days, DAY)
                 to_distribute -= DAY
@@ -118,7 +119,6 @@ if ARGS['SHOW_LEGEND']:
 
 start_day = datetime.fromtimestamp(save.activities[0][1]).weekday()
 start_hour = experiment_start_time % DAY + ARGS['UTC_OFFSET']
-
 
 def format_coord(x, y):
     x = int(x - 0.5)

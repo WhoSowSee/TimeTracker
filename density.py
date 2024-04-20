@@ -49,7 +49,7 @@ def construct_bars(week):
             linewidth=0.5,
         )
 
-        if period_times[activity_name] >= ARGS["LABEL_TRESHOLD"] * period:
+        if period_times[activity_name] >= ARGS["LABEL_THRESHOLD"] * period:
             ax[0][1].text(
                 x=week,
                 y=period_times[activity_name] / period / 2 + offset,

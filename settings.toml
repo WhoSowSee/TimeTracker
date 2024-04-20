@@ -18,13 +18,13 @@ SILENT = false  # -s --silent
 
 [tracker]
 ANOTHER = "Другое"
-ANOTHER_DEFAULT_NOTE = "Магазин"
+ANOTHER_DEFAULT_NOTE = "Программирование"
 
 [bar]
 HIDE_VOID = false
 
-LABEL_TRESHOLD = 0.04     # -t <float>
-AV_LABEL_TRESHOLD = 0.04  # -avt <float>
+LABEL_THRESHOLD = 0.04     # -t <float>
+AV_LABEL_THRESHOLD = 0.04  # -avt <float>
 
 SHOW_LEGEND = true  # -l
 LEGEND_COLUMNS = 1  # -lc <int>
@@ -35,8 +35,8 @@ PLOT_HEIGHT = 5.7  # -h <float>
 [barh]
 HIDE_VOID = false  # -v
 
-LABEL_TRESHOLD = 0.04      # -t <float>
-AV_LABEL_TRESHOLD = 0.042  # -avt <float>
+LABEL_THRESHOLD = 0.04      # -t <float>
+AV_LABEL_THRESHOLD = 0.042  # -avt <float>
 
 SHOW_LEGEND = true  # -l
 LEGEND_COLUMNS = 1  # -lc <int>
@@ -57,7 +57,7 @@ CUMULATIVE = false  # -c
 SILENT = false     # -s --silent
 HIDE_VOID = false  # -v
 
-LABEL_TRESHOLD = 0.07  # -t <float>
+LABEL_THRESHOLD = 0.07  # -t <float>
 
 SHOW_LEGEND = true  # -l
 LEGEND_COLUMNS = 1  # -lc <int>

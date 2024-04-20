@@ -5,15 +5,15 @@ from matplotlib.ticker import MultipleLocator, PercentFormatter
 import save
 from setup import setup
 from utils import (
+    WEEK,
     create_graphics_directory_path,
-    generate_activites_times,
+    generate_activities_times,
     normalize_color,
-    w,
 )
 
-ARGS, ACTIVITIES = setup("density")
-activities_times = generate_activites_times(save.activities, save.timestamp)
 GRAPH_NAME = 'density'
+ARGS, ACTIVITIES = setup(GRAPH_NAME)
+activities_times = generate_activities_times(save.activities, save.timestamp)
 
 bars = {}
 period_times = {activity_name: 0 for activity_name in ACTIVITIES}
@@ -49,7 +49,7 @@ def construct_bars(week):
             linewidth=0.5,
         )
 
-        if period_times[activity_name] >= ARGS["LABEL_TRESHOLD"] * period:
+        if period_times[activity_name] >= ARGS["LABEL_THRESHOLD"] * period:
             ax[0][1].text(
                 x=week,
                 y=period_times[activity_name] / period / 2 + offset,
@@ -65,7 +65,7 @@ def construct_bars(week):
 
 # Process all activities and add them to plot
 stage = 1
-period = w * (stage if ARGS["CUMULATIVE"] else 1)
+period = WEEK * (stage if ARGS["CUMULATIVE"] else 1)
 
 for i in range(len(save.activities)):
     activity = save.activities[i]
@@ -84,7 +84,7 @@ for i in range(len(save.activities)):
                 period_times[activity_name] = 0
 
         stage += 1
-        period = w * (stage if ARGS["CUMULATIVE"] else 1)
+        period = WEEK * (stage if ARGS["CUMULATIVE"] else 1)
         total_time = sum([period_times[theme] for theme in period_times])
 
     else:
@@ -92,7 +92,7 @@ for i in range(len(save.activities)):
 
 else:
     # Create data for last not full week
-    if (total_time + this_activity_time) % w != 0:
+    if (total_time + this_activity_time) % WEEK != 0:
         construct_bars(stage)
         stage += 1
 
@@ -155,17 +155,19 @@ percentages_max = round(
     1 + 2,
 )
 
+
 ax[0][1].format_coord = format_coord
 
 ax[0][1].set_xticks([i for i in range(1, stage)], [i for i in range(1, stage)])
 ax[0][1].set_xlim(0.5, stage - 0.5)
-
 ax[0][1].set_ylim(0, percentages_max)
+
 ax[0][1].yaxis.set_major_formatter(PercentFormatter(1.0))
 ax[0][1].yaxis.set_major_locator(MultipleLocator(percentages_max / 10))
 
 plt.tight_layout()
 plt.savefig(create_graphics_directory_path(GRAPH_NAME), bbox_inches="tight")
+
 
 if not ARGS["SILENT"]:
     plt.show()

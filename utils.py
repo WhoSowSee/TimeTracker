@@ -2,24 +2,38 @@ import os
 from datetime import datetime
 
 # Time
-s = 1
-m = 60 * s
-h = 60 * m
-d = 24 * h
-w = 7 * d
+SECOND = 1
+MINUTE = 60 * SECOND
+HOUR = 60 * MINUTE
+DAY = 24 * HOUR
+WEEK = 7 * DAY
 
 # Colors
-white = "\033[0m"
-red = "\033[31m"
-green = "\033[32m"
-yellow = "\033[33m"
-blue = "\033[34m"
-magenta = "\033[35m"
-cyan = "\033[36m"
+WHITE = "\033[0m"
+RED = "\033[31m"
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+BLUE = "\033[34m"
+MAGENTA = "\033[35m"
+CYAN = "\033[36m"
 
+# Days
+WEEKDAYS = ("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
 
-def color(text, color):
-    return f"{color}{text}{white}"
+MONTHS = (
+    "Января",
+    "Февраля",
+    "Марта",
+    "Апреля",
+    "Мая",
+    "Июня",
+    "Июля",
+    "Августа",
+    "Сентября",
+    "Октября",
+    "Ноября",
+    "Декабря",
+)
 
 
 def normalize_color(activity):
@@ -28,7 +42,7 @@ def normalize_color(activity):
     return color
 
 
-def generate_activites_times(activities, timestamp):
+def generate_activities_times(activities, timestamp):
     save_activities_names = set([i[0] for i in activities])
     activities_times = {
         activity_name: [] for activity_name in save_activities_names
@@ -44,39 +58,40 @@ def generate_activites_times(activities, timestamp):
     return activities_times
 
 
-def stages_formatter(stages, verb=0):
-    if verb:
-        form = ["этапа", "этапов", "этапов"]
-    else:
-        form = ["этап", "этапа", "этапов"]
+# Уже есть в tracker, но можно импортировать в tracker отсюда
+# def stages_formatter(stages, verb=0) -> str:
+#     if verb:
+#         form = ["этапа", "этапов", "этапов"]
+#     else:
+#         form = ["этап", "этапа", "этапов"]
 
-    last_digit = int(str(stages)[-1])
-    last_2_digits = int(str(stages)[-2:])
+#     last_digit = int(str(stages)[-1])
+#     last_2_digits = int(str(stages)[-2:])
 
-    if last_digit == 1 and last_2_digits != 11:
-        return f"{stages} {form[0]}"
+#     if last_digit == 1 and last_2_digits != 11:
+#         return f"{stages} {form[0]}"
 
-    if 1 <= last_digit <= 4 and (last_2_digits < 10 or last_2_digits > 20):
-        return f"{stages} {form[1]}"
+#     if 1 <= last_digit <= 4 and (last_2_digits < 10 or last_2_digits > 20):
+#         return f"{stages} {form[1]}"
 
-    return f"{stages} {form[2]}"
+#     return f"{stages} {form[2]}"
 
 
-# def delta(time, cap=d):
-#     for postfix, name in ((w, 'н'), (d, 'д'), (h, 'ч'), (m, 'м'), (s, 'с')):
+# def delta(time, cap=DAY):
+#     for postfix, name in ((WEEK, 'н'), (DAY, 'д'), (HOUR, 'ч'), (MINUTE, 'м'), (SECOND, 'с')):
 #         if time >= postfix and postfix <= cap:
 #             time = time / postfix
 #             return f"{round(time) if round(time, 1) == round(time) else round(time, 1)}{name}"
 
 
-def timedelta(time):
+def timedelta(time) -> str:
     time = int(time)
 
-    if time < d:
+    if time < DAY:
         weeks = ""
     else:
-        weeks = f"{time // d}д"
-        time -= d * (time // d)
+        weeks = f"{time // DAY}д"
+        time -= DAY * (time // DAY)
 
         if time == 0:
             return weeks
@@ -84,7 +99,7 @@ def timedelta(time):
             weeks += " "
 
     clock = []
-    for period in (h, m, s):
+    for period in (HOUR, MINUTE, SECOND):
         clock.append(f"{time // period:02}")
         time -= period * (time // period)
 

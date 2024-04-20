@@ -159,5 +159,14 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
-#VSCode
-.vscode
+# VSCode
+.vscode/
+
+# Local
+Mine/
+save.py
+graph_images/
+pyproject.toml
+.stfolder/
+.stfolder (1)/
+.stfolder.removed-20240414-234650/

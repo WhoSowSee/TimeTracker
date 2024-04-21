@@ -74,8 +74,8 @@ for activity in save.activities:
         # Create bars, separated by days
         while to_distribute != 0:
             days += 1
-            # offset = 0
-            offset -= DAY
+            offset = 0
+            # offset -= DAY
 
             if to_distribute >= DAY:
                 bar_constructor(days, DAY)

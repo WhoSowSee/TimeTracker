@@ -255,7 +255,8 @@ ax[1][1].yaxis.set_major_locator(MultipleLocator(average_time_max / 10))
 ax[1][1].yaxis.tick_right()
 
 plt.tight_layout()
-plt.savefig(create_graphics_directory_path(GRAPH_NAME), bbox_inches='tight')
+if ARGS["IMAGE"]:
+    plt.savefig(create_graphics_directory_path(GRAPH_NAME), bbox_inches='tight')
 
 if not ARGS['SILENT']:
     plt.show()

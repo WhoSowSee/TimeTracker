@@ -164,8 +164,9 @@ cython_debug/
 
 # Local
 Mine/
-save.py
 graph_images/
+dumps/
+save.py
 pyproject.toml
 .stfolder/
 .stfolder (1)/

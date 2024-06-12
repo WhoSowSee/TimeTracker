@@ -1,5 +1,6 @@
 import os
 from datetime import datetime, timedelta
+from re import sub, findall, fullmatch
 from os import makedirs, path, system
 from time import time
 
@@ -141,7 +142,6 @@ if not saved:
     timestamp: float = time()
     data_save()
 
-
 while True:
     clear_screen()
 
@@ -267,44 +267,49 @@ while True:
                 f'Последний этап: {activity_name} ({activity_start_time}) {CYAN}{activity_lasts}{WHITE}'
             )
             try:
-                time_input = input('Этап закончился раньше на: ')
-                time_parts = time_input.split('+')
-                days = 0
-                hours = 0
-                minutes = 0
-                seconds = 0
+                input_offset = input('Этап закончился раньше на: ').strip()
+                if fullmatch(
+                    r"^((([-+]?(\d+)?(\.\d*)?))?([smhd])?(\s|$))+",
+                    input_offset,
+                ):
+                    input_offset = sub(
+                        r"([-+]?\d+)(\s|$)", r"\1s ", input_offset
+                    )  # Translate values without type to seconds (1 -> 1s)
+                    input_offset = sub(
+                        r"(^|\s)((-?\+?)([smhd]))", r" \g<3>1\4 ", input_offset
+                    )  # Add values to lone types (h -> 1h)
+                    input_offset = [
+                        (r[0], r[-1])
+                        for r in findall(
+                            r"((-?|\+?)\d+(\.\d*)?)([smhd])", input_offset
+                        )
+                    ]  # Make (value, type) pairs
 
-                for part in time_parts:
-                    part = part.strip()
-                    if part.endswith('d'):
-                        days = int(part[:-1])
-                    elif part.endswith('h'):
-                        hours = int(part[:-1])
-                    elif part.endswith('m'):
-                        minutes = int(part[:-1])
-                    elif part.endswith('s'):
-                        seconds = int(part[:-1])
+                    offset = 0
+                    for pair in input_offset:
+                        offset += (
+                            float(pair[0])
+                            * {'s': SECOND, 'm': MINUTE, 'h': HOUR, 'd': DAY}[
+                                pair[1]
+                            ]
+                        )
+                    if offset < activity_lasts.total_seconds():
+                        activities[-1][1] += offset
+                        activity_lasts = timedelta(
+                            0, round(timestamp - activities[-1][1])
+                        )
+                        input(
+                            f"\nНовая продолжительность этапа: {CYAN}{activity_lasts}{WHITE}"
+                        )
                     else:
-                        raise ValueError
-                allocated_time = (
-                    days * DAY
-                    + hours * HOUR
-                    + minutes * MINUTE
-                    + seconds * SECOND
-                )
-
-                if allocated_time < activity_lasts.total_seconds():
-                    activities[-1][1] += allocated_time
-                    activity_lasts = timedelta(
-                        0, round(timestamp - activities[-1][1])
-                    )
-                    input(
-                        f'\nНовая продолжительность этапа: {CYAN}{activity_lasts}{WHITE}'
-                    )
+                        input(
+                            f"\n{RED}Этап становится отрицательным, действие отменено{WHITE}"
+                        )
                 else:
                     input(
-                        f'\n{RED}Длительность этапа становится отрицательной, действие отменено{WHITE}'
+                        f"\n{RED}Недопустимая строка, действие отменено{WHITE}"
                     )
+
             except Exception as val:
                 input(f'\n{RED}Действие отменено{WHITE}')
             except KeyboardInterrupt as val:

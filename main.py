@@ -104,7 +104,7 @@ def run_activity() -> None:
                         clear_screen()
                 case 7:
                     clear_screen()
-                    with open('instruction.md', 'r') as file:
+                    with open('instruction.md', 'r', encoding='UTF-8') as file:
                         markdown_text = file.read()
                     rich.print(Markdown(markdown_text))
                     input()

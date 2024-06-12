@@ -31,6 +31,16 @@ def add_argument(argument, parser, ARGS):
                 dest="SILENT",
             )
 
+        case "IMAGE":
+            parser.add_argument(
+                "-i", "--image",
+                help="Do not save plot image",
+                action="store_const",
+                const=not ARGS["IMAGE"],
+                default=ARGS["IMAGE"],
+                dest="IMAGE"
+            )
+
         case "CUMULATIVE":
             parser.add_argument(
                 "-c",

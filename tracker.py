@@ -16,6 +16,7 @@ from utils import (
     SECOND,
     WHITE,
     generate_activities_times,
+    WEEK,
 )
 
 saved = True
@@ -262,26 +263,28 @@ while True:
             activity_start_time = activities[-1][2]
             activity_lasts = timedelta(0, round(timestamp - activities[-1][1]))
 
-            print(f'Формат ввода времени: {GREEN}1d + 15h + 4m + 12s{WHITE}\n')
+            print(f'Формат ввода времени: {GREEN}1w 1d 15h 4m 12s{WHITE}\n')
             print(
                 f'Последний этап: {activity_name} ({activity_start_time}) {CYAN}{activity_lasts}{WHITE}'
             )
             try:
                 input_offset = input('Этап закончился раньше на: ').strip()
                 if fullmatch(
-                    r"^((([-+]?(\d+)?(\.\d*)?))?([smhd])?(\s|$))+",
+                    r'^((([-+]?(\d+)?(\.\d*)?))?([smhdw])?(\s|$))+',
                     input_offset,
                 ):
                     input_offset = sub(
-                        r"([-+]?\d+)(\s|$)", r"\1s ", input_offset
+                        r'([-+]?\d+)(\s|$)', r'\1s ', input_offset
                     )  # Translate values without type to seconds (1 -> 1s)
                     input_offset = sub(
-                        r"(^|\s)((-?\+?)([smhd]))", r" \g<3>1\4 ", input_offset
+                        r'(^|\s)((-?\+?)([smhdw]))',
+                        r' \g<3>1\4 ',
+                        input_offset,
                     )  # Add values to lone types (h -> 1h)
                     input_offset = [
                         (r[0], r[-1])
                         for r in findall(
-                            r"((-?|\+?)\d+(\.\d*)?)([smhd])", input_offset
+                            r'((-?|\+?)\d+(\.\d*)?)([smhdw])', input_offset
                         )
                     ]  # Make (value, type) pairs
 
@@ -289,9 +292,13 @@ while True:
                     for pair in input_offset:
                         offset += (
                             float(pair[0])
-                            * {'s': SECOND, 'm': MINUTE, 'h': HOUR, 'd': DAY}[
-                                pair[1]
-                            ]
+                            * {
+                                's': SECOND,
+                                'm': MINUTE,
+                                'h': HOUR,
+                                'd': DAY,
+                                'w': WEEK,
+                            }[pair[1]]
                         )
                     if offset < activity_lasts.total_seconds():
                         activities[-1][1] += offset

@@ -72,7 +72,7 @@ def call_activity_table() -> None:
 def call_file(file_path: str) -> None:
     if save.activities:
         for _ in trange(100, desc='Генерация графика'):
-            time.sleep(0.02)
+            time.sleep(0.01)
         subprocess.run([sys.executable, file_path])
         clear_screen()
     else:

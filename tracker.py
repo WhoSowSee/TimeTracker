@@ -55,7 +55,7 @@ def data_save(saved=True) -> None:
             )
             makedirs(path.dirname(filename), exist_ok=True)
 
-            with open(filename, 'w') as file:
+            with open(filename, 'w', encoding='UTF-8') as file:
                 file.write(
                     f'{saved = }\ntimestamp = {activities[0][1] + weeks * 7 * 24 * HOUR}\n'
                 )

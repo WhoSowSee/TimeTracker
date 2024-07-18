@@ -92,7 +92,7 @@ for activity in save.activities:
             days += 1
             # offset = 0
             offset -= DAY
-            
+
             if to_distribute >= DAY:
                 bar_constructor(days, DAY)
                 to_distribute -= DAY
@@ -119,6 +119,7 @@ if ARGS['SHOW_LEGEND']:
 
 start_day = datetime.fromtimestamp(save.activities[0][1]).weekday()
 start_hour = experiment_start_time % DAY + ARGS['UTC_OFFSET']
+
 
 def format_coord(x, y):
     x = int(x - 0.5)
@@ -256,7 +257,9 @@ ax[1][1].yaxis.tick_right()
 
 plt.tight_layout()
 if ARGS["IMAGE"]:
-    plt.savefig(create_graphics_directory_path(GRAPH_NAME), bbox_inches='tight')
+    plt.savefig(
+        create_graphics_directory_path(GRAPH_NAME), bbox_inches='tight'
+    )
 
 if not ARGS['SILENT']:
     plt.show()

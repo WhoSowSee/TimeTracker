@@ -162,12 +162,7 @@ cython_debug/
 # VSCode
 .vscode/
 
-# Local
-Mine/
+# Project
 graph_images/
 dumps/
 save.py
-pyproject.toml
-.stfolder/
-.stfolder (1)/
-.stfolder.removed-20240414-234650/

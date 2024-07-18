@@ -72,7 +72,7 @@ def call_activity_table() -> None:
 def call_file(file_path: str) -> None:
     if save.activities:
         for _ in trange(100, desc='Генерация графика'):
-            time.sleep(0.02)
+            time.sleep(0.01)
         subprocess.run([sys.executable, file_path])
         clear_screen()
     else:
@@ -104,7 +104,7 @@ def run_activity() -> None:
                         clear_screen()
                 case 7:
                     clear_screen()
-                    with open('instruction.md', 'r') as file:
+                    with open('instruction.md', 'r', encoding='UTF-8') as file:
                         markdown_text = file.read()
                     rich.print(Markdown(markdown_text))
                     input()

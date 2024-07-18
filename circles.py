@@ -47,7 +47,8 @@ image_side *= ARGS["IMAGE_SCALE"]
 image = Image.fromarray(image)
 image = image.transpose(Image.Transpose.ROTATE_90)
 image = image.resize((image_side, image_side), resample=Image.Resampling.BOX)
-image.save(create_graphics_directory_path(GRAPH_NAME))
+if ARGS["IMAGE"]:
+    image.save(create_graphics_directory_path(GRAPH_NAME))
 
 if not ARGS["SILENT"]:
     image.show()

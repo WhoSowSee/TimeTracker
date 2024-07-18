@@ -1,5 +1,5 @@
-matplotlib==3.8.2
-numpy==1.26.2
-Pillow==10.1.0
+matplotlib==3.9.0
+numpy==1.26.4
+pillow==10.3.0
 rich==13.7.1
-tqdm==4.66.2
+tqdm==4.66.4
